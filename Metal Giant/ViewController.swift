@@ -16,8 +16,10 @@ class ViewController: UIViewController {
     var commandQueue: MTLCommandQueue!
     var timer: CADisplayLink!
 
-    var objectToDraw: Triangle!
-    
+    //var objectToDraw: Triangle!
+    //var objectToDraw: Cube!
+    var objectToDraw: Node!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -30,8 +32,15 @@ class ViewController: UIViewController {
         metalLayer.frame = view.layer.frame  // 5
         view.layer.addSublayer(metalLayer)   // 6
         
-        objectToDraw = Triangle(device: metalDevice)
+        //objectToDraw = Triangle(device: metalDevice)
+        objectToDraw = Cube(device: metalDevice)
         
+        objectToDraw.positionX = -0.25
+        objectToDraw.positionY =  0.25
+        objectToDraw.positionZ = -0.25
+        objectToDraw.rotationZ = Matrix4.degrees(toRad: 45)
+        objectToDraw.scale = 0.5
+
         // Try bytesNoCopy
         // Investigate buffer persistence
         

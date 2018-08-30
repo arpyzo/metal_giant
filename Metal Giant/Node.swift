@@ -11,11 +11,19 @@ import Metal
 import QuartzCore
 
 class Node {
-    
     let device: MTLDevice
     let name: String
     var vertexCount: Int
     var vertexBuffer: MTLBuffer
+    
+    var positionX: Float = 0.0
+    var positionY: Float = 0.0
+    var positionZ: Float = 0.0
+    
+    var rotationX: Float = 0.0
+    var rotationY: Float = 0.0
+    var rotationZ: Float = 0.0
+    var scale: Float     = 1.0
     
     init(name: String, vertices: Array<Vertex>, device: MTLDevice){
         // 1
@@ -48,6 +56,19 @@ class Node {
         let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         renderEncoder?.setRenderPipelineState(pipelineState)
         renderEncoder?.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+        
+        // 1
+        let nodeModelMatrix = self.modelMatrix()
+        // 2
+        let uniformBuffer = device.makeBuffer(length: MemoryLayout<Float>.size * Matrix4.numberOfElements(), options: [])
+        // 3
+        let bufferPointer = uniformBuffer?.contents()
+        // 4
+        memcpy(bufferPointer, nodeModelMatrix.raw(), MemoryLayout<Float>.size * Matrix4.numberOfElements())
+        // 5
+        renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
+
+        
         renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount,
                                      instanceCount: vertexCount/3)
         renderEncoder?.endEncoding()
@@ -56,4 +77,11 @@ class Node {
         commandBuffer?.commit()
     }
     
+    func modelMatrix() -> Matrix4 {
+        let matrix = Matrix4()
+        matrix.translate(positionX, y: positionY, z: positionZ)
+        matrix.rotateAroundX(rotationX, y: rotationY, z: rotationZ)
+        matrix.scale(scale, y: scale, z: scale)
+        return matrix
+    }
 }
