@@ -19,10 +19,12 @@ class ViewController: UIViewController {
     //var objectToDraw: Triangle!
     //var objectToDraw: Cube!
     var objectToDraw: Node!
+    
+    var projectionMatrix: Matrix4!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        // Do any additional setup after loading the view, typically from a nib
         metalDevice = MTLCreateSystemDefaultDevice()
         
         metalLayer = CAMetalLayer()          // 1
@@ -32,14 +34,28 @@ class ViewController: UIViewController {
         metalLayer.frame = view.layer.frame  // 5
         view.layer.addSublayer(metalLayer)   // 6
         
+        projectionMatrix = Matrix4.makePerspectiveViewAngle(
+            Matrix4.degrees(toRad: 85.0),
+            aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height),
+            nearZ: 0.01,
+            farZ: 100.0
+        )
+        
         //objectToDraw = Triangle(device: metalDevice)
         objectToDraw = Cube(device: metalDevice)
         
-        objectToDraw.positionX = -0.25
+        objectToDraw.positionX = 0.0
+        objectToDraw.positionY =  0.0
+        objectToDraw.positionZ = -2.0
+        objectToDraw.rotationZ = Matrix4.degrees(toRad: 45);
+        objectToDraw.scale = 0.5
+        
+        /*objectToDraw.positionX = -0.25
         objectToDraw.positionY =  0.25
         objectToDraw.positionZ = -0.25
         objectToDraw.rotationZ = Matrix4.degrees(toRad: 45)
-        objectToDraw.scale = 0.5
+        objectToDraw.scale = 0.5*/
+
 
         // Try bytesNoCopy
         // Investigate buffer persistence
@@ -71,7 +87,7 @@ class ViewController: UIViewController {
     
     func render() {
         guard let drawable = metalLayer?.nextDrawable() else { return }
-        objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, clearColor: nil)
+        objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, projectionMatrix: projectionMatrix, clearColor: nil)
     }
     
     @objc func gameloop() {
