@@ -25,6 +25,8 @@ class Node {
     var rotationZ: Float = 0.0
     var scale: Float     = 1.0
     
+    var time:CFTimeInterval = 0.0
+    
     init(name: String, vertices: Array<Vertex>, device: MTLDevice){
         // 1
         var vertexData = Array<Float>()
@@ -42,7 +44,7 @@ class Node {
         vertexCount = vertices.count
     }
     
-    func render(commandQueue: MTLCommandQueue, pipelineState: MTLRenderPipelineState, drawable: CAMetalDrawable, projectionMatrix: Matrix4, clearColor: MTLClearColor?){
+    func render(commandQueue: MTLCommandQueue, pipelineState: MTLRenderPipelineState, drawable: CAMetalDrawable, parentModelViewMatrix: Matrix4, projectionMatrix: Matrix4, clearColor: MTLClearColor?){
         
         let renderPassDescriptor = MTLRenderPassDescriptor()
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
@@ -54,10 +56,12 @@ class Node {
         let commandBuffer = commandQueue.makeCommandBuffer()
         
         let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+        renderEncoder?.setCullMode(MTLCullMode.front)
         renderEncoder?.setRenderPipelineState(pipelineState)
         renderEncoder?.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         
         let nodeModelMatrix = self.modelMatrix()
+        nodeModelMatrix.multiplyLeft(parentModelViewMatrix)
 
         let uniformBuffer = device.makeBuffer(length: MemoryLayout<Float>.size * Matrix4.numberOfElements() * 2, options: [])
 
@@ -84,4 +88,9 @@ class Node {
         matrix.scale(scale, y: scale, z: scale)
         return matrix
     }
+    
+    func updateWithDelta(delta: CFTimeInterval){
+        time += delta
+    }
+
 }
