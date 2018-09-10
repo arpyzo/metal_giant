@@ -9,7 +9,12 @@
 import UIKit
 import Metal
 
-class ViewController: UIViewController {
+protocol MetalViewControllerDelegate : class {
+    func updateLogic(timeSinceLastUpdate: CFTimeInterval)
+    func renderObjects(drawable: CAMetalDrawable)
+}
+
+class MetalViewController: UIViewController {
     var metalDevice: MTLDevice!
     var metalLayer: CAMetalLayer!
     var pipelineState: MTLRenderPipelineState!
@@ -18,11 +23,13 @@ class ViewController: UIViewController {
 
     //var objectToDraw: Triangle!
     //var objectToDraw: Cube!
-    var objectToDraw: Node!
+    //var objectToDraw: Node!
     
     var projectionMatrix: Matrix4!
     
     var lastFrameTimestamp: CFTimeInterval = 0.0
+    
+    weak var metalViewControllerDelegate: MetalViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +51,7 @@ class ViewController: UIViewController {
         )
         
         //objectToDraw = Triangle(device: metalDevice)
-        objectToDraw = Cube(device: metalDevice)
+        //objectToDraw = Cube(device: metalDevice)
         
         //objectToDraw.positionX = 0.0
         //objectToDraw.positionY =  0.0
@@ -78,7 +85,7 @@ class ViewController: UIViewController {
         
         commandQueue = metalDevice.makeCommandQueue()
         
-        timer = CADisplayLink(target: self, selector: #selector(ViewController.newFrame(displayLink:)))
+        timer = CADisplayLink(target: self, selector: #selector(MetalViewController.newFrame(displayLink:)))
         
         timer.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
     }
@@ -91,12 +98,14 @@ class ViewController: UIViewController {
     func render() {
         guard let drawable = metalLayer?.nextDrawable() else { return }
         
-        let worldModelMatrix = Matrix4()
+        /*let worldModelMatrix = Matrix4()
         worldModelMatrix.translate(0.0, y: 0.0, z: -7.0)
         worldModelMatrix.rotateAroundX(Matrix4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
         objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, parentModelViewMatrix: worldModelMatrix, projectionMatrix: projectionMatrix ,clearColor: nil)
-
+        */
+        
+        self.metalViewControllerDelegate?.renderObjects(drawable: drawable)
     }
     
     // 1
@@ -116,9 +125,9 @@ class ViewController: UIViewController {
     }
     
     func gameloop(timeSinceLastUpdate: CFTimeInterval) {
-        
+        self.metalViewControllerDelegate?.updateLogic(timeSinceLastUpdate: timeSinceLastUpdate)
         // 4
-        objectToDraw.updateWithDelta(delta: timeSinceLastUpdate)
+        //objectToDraw.updateWithDelta(delta: timeSinceLastUpdate)
         
         // 5
         autoreleasepool {
