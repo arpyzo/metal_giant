@@ -125,7 +125,7 @@ class MetalViewController: UIViewController {
     }
     
     func gameloop(timeSinceLastUpdate: CFTimeInterval) {
-        self.metalViewControllerDelegate?.updateLogic(timeSinceLastUpdate: timeSinceLastUpdate)
+        //self.metalViewControllerDelegate?.updateLogic(timeSinceLastUpdate: timeSinceLastUpdate)
         // 4
         //objectToDraw.updateWithDelta(delta: timeSinceLastUpdate)
         

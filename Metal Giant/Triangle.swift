@@ -5,7 +5,7 @@
 //  Created by Robert Pyzalski on 8/27/18.
 //  Copyright © 2018 Robert Pyzalski. All rights reserved.
 //
-
+/*
 import Foundation
 import Metal
 
@@ -21,4 +21,4 @@ class Triangle: Node {
         super.init(name: "Triangle", vertices: verticesArray, device: device)
     }
     
-}
+}*/

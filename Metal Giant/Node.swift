@@ -28,7 +28,10 @@ class Node {
     
     var time:CFTimeInterval = 0.0
     
-    init(name: String, vertices: Array<Vertex>, device: MTLDevice){
+    var texture: MTLTexture
+    lazy var samplerState: MTLSamplerState? = Node.defaultSampler(device: self.device)
+    
+    init(name: String, vertices: Array<Vertex>, device: MTLDevice, texture: MTLTexture) {
         // 1
         var vertexData = Array<Float>()
         for vertex in vertices{
@@ -43,6 +46,8 @@ class Node {
         self.name = name
         self.device = device
         vertexCount = vertices.count
+        
+        self.texture = texture
         
         self.bufferProvider = BufferProvider(device: device, inflightBuffersCount: 3, sizeOfUniformsBuffer: MemoryLayout<Float>.size * Matrix4.numberOfElements() * 2)
     }
@@ -68,6 +73,11 @@ class Node {
         renderEncoder?.setRenderPipelineState(pipelineState)
         renderEncoder?.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         
+        renderEncoder?.setFragmentTexture(texture, index: 0)
+        if let samplerState = samplerState{
+            renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
+        }
+
         let nodeModelMatrix = self.modelMatrix()
         nodeModelMatrix.multiplyLeft(parentModelViewMatrix)
 
@@ -101,6 +111,21 @@ class Node {
     
     func updateWithDelta(delta: CFTimeInterval){
         time += delta
+    }
+    
+    class func defaultSampler(device: MTLDevice) -> MTLSamplerState {
+        let sampler = MTLSamplerDescriptor()
+        sampler.minFilter             = MTLSamplerMinMagFilter.nearest
+        sampler.magFilter             = MTLSamplerMinMagFilter.nearest
+        sampler.mipFilter             = MTLSamplerMipFilter.nearest
+        sampler.maxAnisotropy         = 1
+        sampler.sAddressMode          = MTLSamplerAddressMode.clampToEdge
+        sampler.tAddressMode          = MTLSamplerAddressMode.clampToEdge
+        sampler.rAddressMode          = MTLSamplerAddressMode.clampToEdge
+        sampler.normalizedCoordinates = true
+        sampler.lodMinClamp           = 0
+        sampler.lodMaxClamp           = .greatestFiniteMagnitude
+        return device.makeSamplerState(descriptor: sampler)!
     }
 
 }
