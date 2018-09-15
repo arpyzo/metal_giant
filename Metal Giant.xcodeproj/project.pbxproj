@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D72CE922214793C200246A64 /* cube.png in Resources */ = {isa = PBXBuildFile; fileRef = D72CE921214793C200246A64 /* cube.png */; };
 		D75456E6212E86CD00EFC86F /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = D75456E5212E86CD00EFC86F /* Shaders.metal */; };
+		D75A5270214D9FE000D0BD39 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75A526F214D9FE000D0BD39 /* Light.swift */; };
 		D786118021463F0500A19176 /* MetalTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D786117F21463F0400A19176 /* MetalTexture.swift */; };
 		D78D87C6212A8AE4001EA8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */; };
 		D78D87C8212A8AE4001EA8BD /* MetalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D87C7212A8AE4001EA8BD /* MetalViewController.swift */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		D72CE921214793C200246A64 /* cube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cube.png; sourceTree = "<group>"; };
 		D75456E5212E86CD00EFC86F /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		D75A526F214D9FE000D0BD39 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		D786117F21463F0400A19176 /* MetalTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalTexture.swift; sourceTree = "<group>"; };
 		D78D87C2212A8AE4001EA8BD /* Metal Giant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Metal Giant.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				D786117F21463F0400A19176 /* MetalTexture.swift */,
 				D7EAC5F5213503E200B9827C /* Triangle.swift */,
 				D7A97FD92137A7B80015C656 /* Cube.swift */,
+				D75A526F214D9FE000D0BD39 /* Light.swift */,
 			);
 			path = "Metal Giant";
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 				D75456E6212E86CD00EFC86F /* Shaders.metal in Sources */,
 				D7EAC5F02134FFCF00B9827C /* Matrix4.m in Sources */,
 				D78D87C8212A8AE4001EA8BD /* MetalViewController.swift in Sources */,
+				D75A5270214D9FE000D0BD39 /* Light.swift in Sources */,
 				D7EAC5F4213502AE00B9827C /* Node.swift in Sources */,
 				D7A97FDA2137A7B80015C656 /* Cube.swift in Sources */,
 				D7EAC5F22135027700B9827C /* Vertex.swift in Sources */,

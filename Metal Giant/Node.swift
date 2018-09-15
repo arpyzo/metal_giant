@@ -28,6 +28,9 @@ class Node {
     
     var time:CFTimeInterval = 0.0
     
+    let light = Light(color: (1.0,1.0,1.0), ambientIntensity: 0.1, direction: (0.0, 0.0, 1.0), diffuseIntensity: 0.8, shininess: 10, specularIntensity: 2)
+
+    
     var texture: MTLTexture
     lazy var samplerState: MTLSamplerState? = Node.defaultSampler(device: self.device)
     
@@ -49,7 +52,10 @@ class Node {
         
         self.texture = texture
         
-        self.bufferProvider = BufferProvider(device: device, inflightBuffersCount: 3, sizeOfUniformsBuffer: MemoryLayout<Float>.size * Matrix4.numberOfElements() * 2)
+        //self.bufferProvider = BufferProvider(device: device, inflightBuffersCount: 3, sizeOfUniformsBuffer: MemoryLayout<Float>.size * Matrix4.numberOfElements() * 2)
+        let sizeOfUniformsBuffer = MemoryLayout<Float>.size * Matrix4.numberOfElements() * 2 + Light.size()
+        self.bufferProvider = BufferProvider(device: device, inflightBuffersCount: 3, sizeOfUniformsBuffer: sizeOfUniformsBuffer)
+
     }
     
     func render(commandQueue: MTLCommandQueue, pipelineState: MTLRenderPipelineState, drawable: CAMetalDrawable, parentModelViewMatrix: Matrix4, projectionMatrix: Matrix4, clearColor: MTLClearColor?) {
@@ -59,8 +65,11 @@ class Node {
         let renderPassDescriptor = MTLRenderPassDescriptor()
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        renderPassDescriptor.colorAttachments[0].clearColor =
-            MTLClearColor(red: 0.0, green: 104.0/255.0, blue: 5.0/255.0, alpha: 1.0)
+        // GREEN
+        //renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 104.0/255.0, blue: 5.0/255.0, alpha: 1.0)
+        // BLACK
+        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+
         renderPassDescriptor.colorAttachments[0].storeAction = .store
         
         let commandBuffer = commandQueue.makeCommandBuffer()
@@ -72,6 +81,7 @@ class Node {
         renderEncoder?.setCullMode(MTLCullMode.front)
         renderEncoder?.setRenderPipelineState(pipelineState)
         renderEncoder?.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+        
         
         renderEncoder?.setFragmentTexture(texture, index: 0)
         if let samplerState = samplerState{
@@ -88,9 +98,10 @@ class Node {
         //memcpy(bufferPointer, nodeModelMatrix.raw(), MemoryLayout<Float>.size * Matrix4.numberOfElements())
         //memcpy(bufferPointer?.advanced(by: MemoryLayout<Float>.size * Matrix4.numberOfElements()), projectionMatrix.raw(), MemoryLayout<Float>.size * Matrix4.numberOfElements())
         
-        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: projectionMatrix, modelViewMatrix: nodeModelMatrix)
+        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: projectionMatrix, modelViewMatrix: nodeModelMatrix, light: light)
 
         renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
+        renderEncoder?.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
 
         
         renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount,
