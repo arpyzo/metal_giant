@@ -7,6 +7,8 @@
 //
 
 #include <metal_stdlib>
+#include <metal_matrix>
+#include <metal_geometric>
 using namespace metal;
 
 struct VertexIn{
@@ -85,12 +87,12 @@ fragment float4 basic_fragment(VertexOut interpolated [[stage_in]],
     float4 ambientColor = float4(light.color * light.ambientIntensity, 1);
     
     //Diffuse
-    float diffuseFactor = max(0.0,dot(interpolated.normal, light.direction)); // 1
+    float diffuseFactor = max(0.0, dot((packed_float3)interpolated.normal, light.direction)); // 1
     float4 diffuseColor = float4(light.color * light.diffuseIntensity * diffuseFactor ,1.0); // 2
 
     //Specular
     float3 eye = normalize(interpolated.fragmentPosition); //1
-    float3 reflection = reflect(light.direction, interpolated.normal); // 2
+    float3 reflection = reflect(light.direction, (packed_float3)interpolated.normal); // 2
     float specularFactor = pow(max(0.0, dot(reflection, eye)), light.shininess); //3
     float4 specularColor = float4(light.color * light.specularIntensity * specularFactor ,1.0);//4
 

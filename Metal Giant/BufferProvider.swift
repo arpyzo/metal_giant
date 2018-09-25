@@ -8,6 +8,7 @@
 
 import Foundation
 import Metal
+import simd
 
 class BufferProvider: NSObject {
     let inflightBuffersCount: Int
@@ -34,7 +35,7 @@ class BufferProvider: NSObject {
         }
     }
     
-    func nextUniformsBuffer(projectionMatrix: Matrix4, modelViewMatrix: Matrix4, light: Light) -> MTLBuffer {
+    func nextUniformsBuffer(projectionMatrix: float4x4, modelViewMatrix: float4x4, light: Light) -> MTLBuffer {
 
         
         // 1
@@ -44,10 +45,16 @@ class BufferProvider: NSObject {
         let bufferPointer = buffer.contents()
         
         // 3
-        memcpy(bufferPointer, modelViewMatrix.raw(), MemoryLayout<Float>.size * Matrix4.numberOfElements())
-        memcpy(bufferPointer + MemoryLayout<Float>.size * Matrix4.numberOfElements(), projectionMatrix.raw(), MemoryLayout<Float>.size * Matrix4.numberOfElements())
-        memcpy(bufferPointer + 2*MemoryLayout<Float>.size*Matrix4.numberOfElements(), light.raw(), Light.size())
+        var projectionMatrix = projectionMatrix
+        var modelViewMatrix = modelViewMatrix
+        
+        //memcpy(bufferPointer, modelViewMatrix.raw(), MemoryLayout<Float>.size * float4x4.numberOfElements())
+        //memcpy(bufferPointer + MemoryLayout<Float>.size * float4x4.numberOfElements(), projectionMatrix.raw(), MemoryLayout<Float>.size * float4x4.numberOfElements())
+        //memcpy(bufferPointer + 2 * MemoryLayout<Float>.size * float4x4.numberOfElements(), light.raw(), Light.size())
 
+        memcpy(bufferPointer, &modelViewMatrix, MemoryLayout<Float>.size * float4x4.numberOfElements())
+        memcpy(bufferPointer + MemoryLayout<Float>.size*float4x4.numberOfElements(), &projectionMatrix, MemoryLayout<Float>.size*float4x4.numberOfElements())
+        memcpy(bufferPointer + 2*MemoryLayout<Float>.size*float4x4.numberOfElements(), light.raw(), Light.size())
         
         // 4
         avaliableBufferIndex += 1
