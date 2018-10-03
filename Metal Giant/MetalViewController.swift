@@ -17,10 +17,10 @@ protocol MetalViewControllerDelegate : class {
 
 class MetalViewController: UIViewController {
     var metalDevice: MTLDevice!
-    var metalLayer: CAMetalLayer!
+    //var metalLayer: CAMetalLayer!
     var pipelineState: MTLRenderPipelineState!
     var commandQueue: MTLCommandQueue!
-    var timer: CADisplayLink!
+    //var timer: CADisplayLink!
     var textureLoader: MTKTextureLoader! = nil
 
     //var objectToDraw: Triangle!
@@ -29,23 +29,33 @@ class MetalViewController: UIViewController {
     
     var projectionMatrix: float4x4!
     
-    var lastFrameTimestamp: CFTimeInterval = 0.0
+    //var lastFrameTimestamp: CFTimeInterval = 0.0
     
     weak var metalViewControllerDelegate: MetalViewControllerDelegate?
+    
+    @IBOutlet weak var mtkView: MTKView! {
+        didSet {
+            mtkView.delegate = self
+            mtkView.preferredFramesPerSecond = 60
+            mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib
         metalDevice = MTLCreateSystemDefaultDevice()
         
-        metalLayer = CAMetalLayer()          // 1
-        metalLayer.device = metalDevice           // 2
+        //metalLayer = CAMetalLayer()          // 1
+        //metalLayer.device = metalDevice           // 2
         textureLoader = MTKTextureLoader(device: metalDevice)
+        
+        mtkView.device = metalDevice
 
-        //metalLayer.pixelFormat = .bgra8Unorm // 3
-        //metalLayer.framebufferOnly = true    // 4
-        //metalLayer.frame = view.layer.frame  // 5
-        view.layer.addSublayer(metalLayer)   // 6
+        //metalLayer.pixelFormat = .bgra8Unorm // early removal
+        //metalLayer.framebufferOnly = true    // early removal
+        //metalLayer.frame = view.layer.frame  // early removal
+        //view.layer.addSublayer(metalLayer)   // 6
         
         projectionMatrix = float4x4.makePerspectiveViewAngle(
             float4x4.degrees(toRad: 85.0),
@@ -89,12 +99,11 @@ class MetalViewController: UIViewController {
         
         commandQueue = metalDevice.makeCommandQueue()
         
-        timer = CADisplayLink(target: self, selector: #selector(MetalViewController.newFrame(displayLink:)))
-        
-        timer.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
+        //timer = CADisplayLink(target: self, selector: #selector(MetalViewController.newFrame(displayLink:)))
+        //timer.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
     }
     
-    override func viewDidLayoutSubviews() {
+    /*override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         if let window = view.window {
@@ -107,28 +116,33 @@ class MetalViewController: UIViewController {
             
             projectionMatrix = float4x4.makePerspectiveViewAngle(float4x4.degrees(toRad: 85.0), aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height), nearZ: 0.01, farZ: 100.0)
         }
-    }
+    }*/
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func render() {
+    /*func render() {
         guard let drawable = metalLayer?.nextDrawable() else { return }
         
-        /*let worldModelMatrix = Matrix4() // now float4x4
-        worldModelMatrix.translate(0.0, y: 0.0, z: -7.0)
-        worldModelMatrix.rotateAroundX(Matrix4.degrees(toRad: 25), y: 0.0, z: 0.0)
+        //let worldModelMatrix = Matrix4() // now float4x4
+        //worldModelMatrix.translate(0.0, y: 0.0, z: -7.0)
+        //worldModelMatrix.rotateAroundX(Matrix4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
-        objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, parentModelViewMatrix: worldModelMatrix, projectionMatrix: projectionMatrix ,clearColor: nil)
-        */
+        //objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, parentModelViewMatrix: worldModelMatrix, projectionMatrix: projectionMatrix ,clearColor: nil)
+ 
         
+        self.metalViewControllerDelegate?.renderObjects(drawable: drawable)
+    }*/
+    
+    func render(_ drawable: CAMetalDrawable?) {
+        guard let drawable = drawable else { return }
         self.metalViewControllerDelegate?.renderObjects(drawable: drawable)
     }
     
     // 1
-    @objc func newFrame(displayLink: CADisplayLink) {
+    /*@objc func newFrame(displayLink: CADisplayLink) {
         
         if lastFrameTimestamp == 0.0
         {
@@ -152,6 +166,23 @@ class MetalViewController: UIViewController {
         autoreleasepool {
             self.render()
         }
+    }*/
+}
+
+// MARK: - MTKViewDelegate
+extension MetalViewController: MTKViewDelegate {
+    
+    // 1
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        projectionMatrix = float4x4.makePerspectiveViewAngle(float4x4.degrees(toRad: 85.0),
+                                                             aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height),
+                                                             nearZ: 0.01, farZ: 100.0)
     }
+    
+    // 2
+    func draw(in view: MTKView) {
+        render(view.currentDrawable)
+    }
+    
 }
 
