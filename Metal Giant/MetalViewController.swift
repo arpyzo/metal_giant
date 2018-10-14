@@ -10,7 +10,7 @@ import UIKit
 import MetalKit
 import simd
 
-protocol MetalViewControllerDelegate : class {
+protocol MetalViewControllerDelegate: class {
     func updateLogic(timeSinceLastUpdate: CFTimeInterval)
     func renderObjects(drawable: CAMetalDrawable)
 }
@@ -63,7 +63,7 @@ class MetalViewController: UIViewController {
             nearZ: 0.01,
             farZ: 100.0
         )
-        
+        // MARK: your face
         //objectToDraw = Triangle(device: metalDevice)
         //objectToDraw = Cube(device: metalDevice)
         
@@ -167,7 +167,7 @@ class MetalViewController: UIViewController {
             self.render()
         }
     }*/
-}
+} //class MetalViewController
 
 // MARK: - MTKViewDelegate
 extension MetalViewController: MTKViewDelegate {
