@@ -1,33 +1,41 @@
-//
-//  SceneViewController.swift
-//  Metal Giant
-//
-//  Created by Robert Pyzalski on 9/9/18.
-//  Copyright © 2018 Robert Pyzalski. All rights reserved.
-//
-
 import UIKit
 import simd
 
 class SceneViewController: MetalViewController, MetalViewControllerDelegate {
-    let panSensivity:Float = 5.0
+    let panSensivity: Float = 5.0
     var lastPanLocation: CGPoint!
-
     
+    var projectionMatrix: float4x4!
     var worldModelMatrix: float4x4!
-    var objectToDraw: Cube!
+    var objectToDraw: Object!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.metalViewControllerDelegate = self
         
+        projectionMatrix = float4x4.makePerspectiveViewAngle(
+            float4x4.degrees(toRad: 85.0),
+            aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height),
+            nearZ: 0.01,
+            farZ: 100.0
+        )
+
         worldModelMatrix = float4x4()
         worldModelMatrix.translate(0.0, y: 0.0, z: -4)
         worldModelMatrix.rotateAroundX(float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
-        objectToDraw = Cube(device: metalDevice, commandQ:commandQueue, textureLoader: textureLoader)
-        self.metalViewControllerDelegate = self
+        objectToDraw = Cube(metalDevice, commandQueue, textureLoader)
         
         setupGestures()
+    }
+    
+    //MetalViewControllerDelegate calls this:
+    func updateProjectionMatrix(newSize: CGSize) {
+        projectionMatrix = float4x4.makePerspectiveViewAngle(
+            float4x4.degrees(toRad: 85.0),
+            aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height),
+            nearZ: 0.01, farZ: 100.0
+        )
     }
     
     //MetalViewControllerDelegate calls this:
@@ -36,6 +44,7 @@ class SceneViewController: MetalViewController, MetalViewControllerDelegate {
         objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, parentModelViewMatrix: worldModelMatrix, projectionMatrix: projectionMatrix, clearColor: nil)
     }
     
+    //MetalViewControllerDelegate calls this:
     func updateLogic(timeSinceLastUpdate: CFTimeInterval) {
         objectToDraw.updateWithDelta(delta: timeSinceLastUpdate)
     }

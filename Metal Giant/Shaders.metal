@@ -9,6 +9,7 @@
 #include <metal_stdlib>
 #include <metal_matrix>
 #include <metal_geometric>
+
 using namespace metal;
 
 struct VertexIn{

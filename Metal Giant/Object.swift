@@ -11,9 +11,8 @@ import Metal
 import QuartzCore
 import simd
 
-class Node {
-    let device: MTLDevice
-    let name: String
+class Object {
+    let metalDevice: MTLDevice
     var vertexCount: Int
     var vertexBuffer: MTLBuffer
     var bufferProvider: BufferProvider
@@ -33,9 +32,9 @@ class Node {
 
     
     var texture: MTLTexture
-    lazy var samplerState: MTLSamplerState? = Node.defaultSampler(device: self.device)
+    lazy var samplerState: MTLSamplerState? = Object.defaultSampler(device: self.metalDevice)
     
-    init(name: String, vertices: Array<Vertex>, device: MTLDevice, texture: MTLTexture) {
+    init(vertices: Array<Vertex>, metalDevice: MTLDevice, texture: MTLTexture) {
         // 1
         var vertexData = Array<Float>()
         for vertex in vertices{
@@ -44,18 +43,16 @@ class Node {
         
         // 2
         let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
-        vertexBuffer = device.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
+        vertexBuffer = metalDevice.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
         
-        // 3
-        self.name = name
-        self.device = device
+        self.metalDevice = metalDevice
         vertexCount = vertices.count
         
         self.texture = texture
         
         //self.bufferProvider = BufferProvider(device: device, inflightBuffersCount: 3, sizeOfUniformsBuffer: MemoryLayout<Float>.size * Matrix4.numberOfElements() * 2)
         let sizeOfUniformsBuffer = MemoryLayout<Float>.size * float4x4.numberOfElements() * 2 + Light.size()
-        self.bufferProvider = BufferProvider(device: device, inflightBuffersCount: 3, sizeOfUniformsBuffer: sizeOfUniformsBuffer)
+        self.bufferProvider = BufferProvider(metalDevice: metalDevice, inflightBuffersCount: 3, sizeOfUniformsBuffer: sizeOfUniformsBuffer)
 
     }
     

@@ -10,13 +10,16 @@ import Foundation
 import Metal
 import simd
 
+// Try bytesNoCopy
+// Investigate buffer persistence
+
 class BufferProvider: NSObject {
     let inflightBuffersCount: Int
     private var uniformsBuffers: [MTLBuffer]
     private var avaliableBufferIndex: Int = 0
     var avaliableResourcesSemaphore: DispatchSemaphore
     
-    init(device:MTLDevice, inflightBuffersCount: Int, sizeOfUniformsBuffer: Int) {
+    init(metalDevice: MTLDevice, inflightBuffersCount: Int, sizeOfUniformsBuffer: Int) {
         
         avaliableResourcesSemaphore = DispatchSemaphore(value: inflightBuffersCount)
 
@@ -24,7 +27,7 @@ class BufferProvider: NSObject {
         uniformsBuffers = [MTLBuffer]()
         
         for _ in 0...inflightBuffersCount - 1 {
-            let uniformsBuffer = device.makeBuffer(length: sizeOfUniformsBuffer, options: [])
+            let uniformsBuffer = metalDevice.makeBuffer(length: sizeOfUniformsBuffer, options: [])
             uniformsBuffers.append(uniformsBuffer!)
         }
     }
