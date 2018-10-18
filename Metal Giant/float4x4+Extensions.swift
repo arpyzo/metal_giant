@@ -42,7 +42,7 @@ extension float4x4 {
     return unsafeBitCast(GLKMatrix4MakeTranslation(x, y, z), to: float4x4.self)
   }
   
-  static func makePerspectiveViewAngle(_ fovyRadians: Float, aspectRatio: Float, nearZ: Float, farZ: Float) -> float4x4 {
+  static func makePerspectiveViewAngle(fovyRadians: Float, aspectRatio: Float, nearZ: Float, farZ: Float) -> float4x4 {
     var q = unsafeBitCast(GLKMatrix4MakePerspective(fovyRadians, aspectRatio, nearZ, farZ), to: float4x4.self)
     let zs = farZ / (nearZ - farZ)
     q[2][2] = zs

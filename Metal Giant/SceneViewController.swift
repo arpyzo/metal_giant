@@ -11,13 +11,13 @@ class SceneViewController: MetalViewController, MetalViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.metalViewControllerDelegate = self
         
         projectionMatrix = float4x4.makePerspectiveViewAngle(
-            float4x4.degrees(toRad: 85.0),
+            fovyRadians: float4x4.degrees(toRad: 85.0),
             aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height),
-            nearZ: 0.01,
-            farZ: 100.0
+            nearZ: 0.01, farZ: 100.0
         )
 
         worldModelMatrix = float4x4()
@@ -32,7 +32,7 @@ class SceneViewController: MetalViewController, MetalViewControllerDelegate {
     //MetalViewControllerDelegate calls this:
     func updateProjectionMatrix(newSize: CGSize) {
         projectionMatrix = float4x4.makePerspectiveViewAngle(
-            float4x4.degrees(toRad: 85.0),
+            fovyRadians: float4x4.degrees(toRad: 85.0),
             aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height),
             nearZ: 0.01, farZ: 100.0
         )
