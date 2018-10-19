@@ -21,8 +21,8 @@ class SceneViewController: MetalViewController, MetalViewControllerDelegate {
         )
 
         worldModelMatrix = float4x4()
-        worldModelMatrix.translate(0.0, y: 0.0, z: -4)
-        worldModelMatrix.rotateAroundX(float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
+        worldModelMatrix.translate(x: 0.0, y: 0.0, z: -4)
+        worldModelMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
         objectToDraw = Cube(metalDevice, commandQueue, textureLoader)
         

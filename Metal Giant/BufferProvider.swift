@@ -56,8 +56,8 @@ class BufferProvider: NSObject {
         //memcpy(bufferPointer + 2 * MemoryLayout<Float>.size * float4x4.numberOfElements(), light.raw(), Light.size())
 
         memcpy(bufferPointer, &modelViewMatrix, MemoryLayout<Float>.size * float4x4.numberOfElements())
-        memcpy(bufferPointer + MemoryLayout<Float>.size*float4x4.numberOfElements(), &projectionMatrix, MemoryLayout<Float>.size*float4x4.numberOfElements())
-        memcpy(bufferPointer + 2*MemoryLayout<Float>.size*float4x4.numberOfElements(), light.raw(), Light.size())
+        memcpy(bufferPointer + MemoryLayout<Float>.size * float4x4.numberOfElements(), &projectionMatrix, MemoryLayout<Float>.size*float4x4.numberOfElements())
+        memcpy(bufferPointer + 2*MemoryLayout<Float>.size * float4x4.numberOfElements(), light.raw(), Light.size())
         
         // 4
         avaliableBufferIndex += 1

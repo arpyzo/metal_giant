@@ -87,7 +87,7 @@ class Object {
         }
 
         var nodeModelMatrix = self.modelMatrix()
-        nodeModelMatrix.multiplyLeft(parentModelViewMatrix)
+        nodeModelMatrix.multiplyLeft(matrix: parentModelViewMatrix)
 
         //let uniformBuffer = device.makeBuffer(length: MemoryLayout<Float>.size * Matrix4.numberOfElements() * 2, options: [])
 
@@ -112,9 +112,9 @@ class Object {
     
     func modelMatrix() -> float4x4 {
         var matrix = float4x4()
-        matrix.translate(positionX, y: positionY, z: positionZ)
-        matrix.rotateAroundX(rotationX, y: rotationY, z: rotationZ)
-        matrix.scale(scale, y: scale, z: scale)
+        matrix.translate(x: positionX, y: positionY, z: positionZ)
+        matrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
+        matrix.scale(x: scale, y: scale, z: scale)
         return matrix
     }
     
