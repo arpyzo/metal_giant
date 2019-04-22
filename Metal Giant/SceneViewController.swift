@@ -40,7 +40,6 @@ class SceneViewController: MetalViewController, MetalViewControllerDelegate {
     
     //MetalViewControllerDelegate calls this:
     func renderObjects(drawable:CAMetalDrawable) {
-        
         objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, parentModelViewMatrix: worldModelMatrix, projectionMatrix: projectionMatrix, clearColor: nil)
     }
     

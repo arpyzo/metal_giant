@@ -1,17 +1,6 @@
-//
-//  Light.swift
-//  Metal Giant
-//
-//  Created by Robert Pyzalski on 9/15/18.
-//  Copyright © 2018 Robert Pyzalski. All rights reserved.
-//
-
-import Foundation
-
 struct Light {
-    
-    var color: (Float, Float, Float)  // 1
-    var ambientIntensity: Float       // 2
+    var color: (Float, Float, Float)
+    var ambientIntensity: Float
     var direction: (Float, Float, Float)
     var diffuseIntensity: Float
     var shininess: Float
@@ -26,4 +15,3 @@ struct Light {
         return raw
     }
 }
-

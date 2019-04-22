@@ -1,12 +1,3 @@
-//
-//  Node.swift
-//  Metal Giant
-//
-//  Created by Robert Pyzalski on 8/27/18.
-//  Copyright © 2018 Robert Pyzalski. All rights reserved.
-//
-
-import Foundation
 import Metal
 import QuartzCore
 import simd
@@ -29,19 +20,16 @@ class Object {
     var time:CFTimeInterval = 0.0
     
     let light = Light(color: (1.0,1.0,1.0), ambientIntensity: 0.1, direction: (0.0, 0.0, 1.0), diffuseIntensity: 0.8, shininess: 10, specularIntensity: 2)
-
     
     var texture: MTLTexture
     lazy var samplerState: MTLSamplerState? = Object.defaultSampler(device: self.metalDevice)
     
     init(vertices: Array<Vertex>, metalDevice: MTLDevice, texture: MTLTexture) {
-        // 1
         var vertexData = Array<Float>()
         for vertex in vertices{
             vertexData += vertex.floatBuffer()
         }
         
-        // 2
         let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         vertexBuffer = metalDevice.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
         
@@ -136,5 +124,4 @@ class Object {
         sampler.lodMaxClamp           = .greatestFiniteMagnitude
         return device.makeSamplerState(descriptor: sampler)!
     }
-
 }
