@@ -9,15 +9,22 @@ protocol MetalViewControllerDelegate: class {
 }
 
 class MetalViewController: UIViewController {
+    var mtkView: MTKView!
+    
     weak var metalViewControllerDelegate: MetalViewControllerDelegate?
     
-    @IBOutlet weak var mtkView: MTKView! {
+    override func loadView() {
+        self.view = MTKView()
+        mtkView = (self.view as! MTKView)
+    }
+    
+    /*@IBOutlet weak var mtkView: MTKView! {
         didSet {
             mtkView.delegate = self
             mtkView.preferredFramesPerSecond = 60
             mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         }
-    }
+    }*/
 
     var metalDevice: MTLDevice!
     var pipelineState: MTLRenderPipelineState!
@@ -45,6 +52,8 @@ class MetalViewController: UIViewController {
         commandQueue = metalDevice.makeCommandQueue()
         
         textureLoader = MTKTextureLoader(device: metalDevice)
+        
+        mtkView.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
