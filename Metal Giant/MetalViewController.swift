@@ -1,4 +1,4 @@
-import UIKit
+/*import UIKit
 import MetalKit
 import simd
 
@@ -18,14 +18,6 @@ class MetalViewController: UIViewController {
         mtkView = (self.view as! MTKView)
     }
     
-    /*@IBOutlet weak var mtkView: MTKView! {
-        didSet {
-            mtkView.delegate = self
-            mtkView.preferredFramesPerSecond = 60
-            mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        }
-    }*/
-
     var metalDevice: MTLDevice!
     var pipelineState: MTLRenderPipelineState!
     var commandQueue: MTLCommandQueue!
@@ -63,7 +55,7 @@ class MetalViewController: UIViewController {
     func render(_ drawable: CAMetalDrawable?) {
         guard let drawable = drawable else { return }
         self.metalViewControllerDelegate?.renderObjects(drawable: drawable)
-    }
+    }*/
     
     /*@objc func newFrame(displayLink: CADisplayLink) {
         if lastFrameTimestamp == 0.0 {
@@ -84,7 +76,7 @@ class MetalViewController: UIViewController {
             self.render()
         }
     }*/
-}
+/*}
 
 // MARK: - MTKViewDelegate
 extension MetalViewController: MTKViewDelegate {
@@ -95,5 +87,5 @@ extension MetalViewController: MTKViewDelegate {
     func draw(in view: MTKView) {
         render(view.currentDrawable)
     }
-}
+}*/
 

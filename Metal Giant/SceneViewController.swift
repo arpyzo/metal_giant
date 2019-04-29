@@ -1,7 +1,14 @@
 import UIKit
+import MetalKit
 import simd
 
-class SceneViewController: MetalViewController, MetalViewControllerDelegate {
+class SceneViewController: UIViewController, MTKViewDelegate {
+    var mtkView: MTKView!
+    var metalDevice: MTLDevice!
+    var pipelineState: MTLRenderPipelineState!
+    var commandQueue: MTLCommandQueue!
+    var textureLoader: MTKTextureLoader!
+    
     let panSensivity: Float = 5.0
     var lastPanLocation: CGPoint!
     
@@ -9,10 +16,34 @@ class SceneViewController: MetalViewController, MetalViewControllerDelegate {
     var worldModelMatrix: float4x4!
     var objectToDraw: Object!
     
+    override func loadView() {
+        self.view = MTKView()
+        mtkView = (self.view as! MTKView)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.metalViewControllerDelegate = self
+        metalDevice = MTLCreateSystemDefaultDevice()
+        mtkView.device = metalDevice
+        
+        let defaultLibrary = metalDevice.makeDefaultLibrary()!
+        let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
+        let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
+        
+        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+        pipelineStateDescriptor.vertexFunction = vertexProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        pipelineState = try! metalDevice.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        
+        commandQueue = metalDevice.makeCommandQueue()
+        
+        textureLoader = MTKTextureLoader(device: metalDevice)
+        
+        mtkView.delegate = self
+        
+        //self.metalViewControllerDelegate = self
         
         projectionMatrix = float4x4.makePerspectiveViewAngle(
             fovyRadians: float4x4.degrees(toRad: 85.0),
@@ -27,6 +58,23 @@ class SceneViewController: MetalViewController, MetalViewControllerDelegate {
         objectToDraw = Cube(metalDevice, commandQueue, textureLoader)
         
         setupGestures()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    func render(_ drawable: CAMetalDrawable?) {
+        guard let drawable = drawable else { return }
+        renderObjects(drawable: drawable)
+    }
+    
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        updateProjectionMatrix(newSize: size)
+    }
+    
+    func draw(in view: MTKView) {
+        render(view.currentDrawable)
     }
     
     //MetalViewControllerDelegate calls this:
