@@ -1,7 +1,7 @@
 import MetalKit
 
 class Cube: Object {
-    init(_ metalDevice: MTLDevice, _ commandQueue: MTLCommandQueue, _ textureLoader: MTKTextureLoader) {
+    init(_ metalDevice: MTLDevice, _ textureLoader: MTKTextureLoader) {
         
         // Front
         let A = Vertex(x: -1.0, y:   1.0, z:   1.0, r:  1.0, g:  0.0, b:  0.0, a:  1.0, s: 0.25, t: 0.25, nX: 0.0, nY: 0.0, nZ: 1.0)
