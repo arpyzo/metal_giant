@@ -24,7 +24,7 @@ class Scene {
         worldModelMatrix.translate(x: 0.0, y: 0.0, z: -4)
         worldModelMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
-        objectToDraw = Cube(metalDevice, textureLoader)
+        objectToDraw = Object(metalDevice, textureLoader)
     }
     
     func updateProjectionMatrix(_ aspectRatio: Float) {

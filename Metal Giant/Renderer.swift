@@ -36,15 +36,8 @@ class Renderer: NSObject, MTKViewDelegate {
         //lastRenderTime = systemTime
         //update(dt: timeDifference)
         
-        render(view.currentDrawable)
-    }
-    
-    func render(_ drawable: CAMetalDrawable?) {
-        guard let drawable = drawable else { return }
-        renderObjects(drawable: drawable)
-    }
-    
-    func renderObjects(drawable:CAMetalDrawable) {
+        guard let drawable = view.currentDrawable else { return }
+        
         scene.objectToDraw.render(commandQueue: commandQueue, pipelineState: pipelineState, drawable: drawable, parentModelViewMatrix: scene.worldModelMatrix, projectionMatrix: scene.projectionMatrix, clearColor: nil)
     }
 }
