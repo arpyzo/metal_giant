@@ -1,15 +1,15 @@
 import MetalKit
 
 class Renderer: NSObject, MTKViewDelegate {
-    var scene: Scene!
-    
     var metalDevice: MTLDevice!
     var pipelineState: MTLRenderPipelineState!
     var commandQueue: MTLCommandQueue!
     var textureLoader: MTKTextureLoader!
+    var samplerState: MTLSamplerState!
     
     var bufferProvider: BufferProvider
-    let light = Light(color: (1.0,1.0,1.0), ambientIntensity: 0.1, direction: (0.0, 0.0, 1.0), diffuseIntensity: 0.8, shininess: 10, specularIntensity: 2)
+    
+    var scene: Scene!
     
     var positionX: Float = 0.0
     var positionY: Float = 0.0
@@ -20,18 +20,17 @@ class Renderer: NSObject, MTKViewDelegate {
     var rotationZ: Float = 0.0
     var scale: Float     = 1.0
     
-    lazy var samplerState: MTLSamplerState? = Renderer.defaultSampler(device: self.metalDevice)
-    
     init(_ metalDevice: MTLDevice) {
         self.metalDevice = metalDevice
         
         let metalLibrary = metalDevice.makeDefaultLibrary()!
-        let fragmentProgram = metalLibrary.makeFunction(name: "basic_fragment")
-        let vertexProgram = metalLibrary.makeFunction(name: "basic_vertex")
-        
+
+        let samplerDescriptor: MTLSamplerDescriptor! = MTLSamplerDescriptor()
+        samplerState = metalDevice.makeSamplerState(descriptor: samplerDescriptor)
+
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
-        pipelineStateDescriptor.vertexFunction = vertexProgram
-        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.vertexFunction = metalLibrary.makeFunction(name: "basic_vertex")
+        pipelineStateDescriptor.fragmentFunction = metalLibrary.makeFunction(name: "basic_fragment")
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         pipelineState = try! metalDevice.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
         
@@ -78,14 +77,12 @@ class Renderer: NSObject, MTKViewDelegate {
         renderEncoder?.setVertexBuffer(scene.objectToDraw.vertexBuffer, offset: 0, index: 0)
         
         renderEncoder?.setFragmentTexture(scene.objectToDraw.texture, index: 0)
-        if let samplerState = samplerState{
-            renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
-        }
+        renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         
         var nodeModelMatrix = self.modelMatrix()
         nodeModelMatrix.multiplyLeft(matrix: scene.worldModelMatrix)
 
-        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: scene.projectionMatrix, modelViewMatrix: nodeModelMatrix, light: light)
+        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: scene.projectionMatrix, modelViewMatrix: nodeModelMatrix, light: scene.light)
         
         renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
         renderEncoder?.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
@@ -105,20 +102,5 @@ class Renderer: NSObject, MTKViewDelegate {
         matrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
         matrix.scale(x: scale, y: scale, z: scale)
         return matrix
-    }
-    
-    class func defaultSampler(device: MTLDevice) -> MTLSamplerState {
-        let sampler = MTLSamplerDescriptor()
-        sampler.minFilter             = MTLSamplerMinMagFilter.nearest
-        sampler.magFilter             = MTLSamplerMinMagFilter.nearest
-        sampler.mipFilter             = MTLSamplerMipFilter.nearest
-        sampler.maxAnisotropy         = 1
-        sampler.sAddressMode          = MTLSamplerAddressMode.clampToEdge
-        sampler.tAddressMode          = MTLSamplerAddressMode.clampToEdge
-        sampler.rAddressMode          = MTLSamplerAddressMode.clampToEdge
-        sampler.normalizedCoordinates = true
-        sampler.lodMinClamp           = 0
-        sampler.lodMaxClamp           = .greatestFiniteMagnitude
-        return device.makeSamplerState(descriptor: sampler)!
     }
 }

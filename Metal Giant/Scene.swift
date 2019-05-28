@@ -9,6 +9,8 @@ class Scene {
     var worldModelMatrix: float4x4!
     var objectToDraw: Object!
     
+    let light = Light(color: (1.0,1.0,1.0), ambientIntensity: 0.1, direction: (0.0, 0.0, 1.0), diffuseIntensity: 0.8, shininess: 10, specularIntensity: 2)
+    
     init(_ metalDevice: MTLDevice, _ aspectRatio: Float) {
         clearColor = MTLClearColor(red: 0.0, green: 104.0/255.0, blue: 5.0/255.0, alpha: 1.0)
         
