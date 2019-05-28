@@ -7,18 +7,26 @@ class Renderer: NSObject, MTKViewDelegate {
     var textureLoader: MTKTextureLoader!
     var samplerState: MTLSamplerState!
     
-    var bufferProvider: BufferProvider
+    var bufferProvider: BufferProvider!
     
-    var scene: Scene!
+    var scene: Scene! {
+        didSet {
+            bufferProvider = BufferProvider(
+                metalDevice: metalDevice,
+                inflightBuffersCount: 3,
+                sizeOfUniformsBuffer: scene.sizeOfUniformsBuffer
+            )
+        }
+    }
     
-    var positionX: Float = 0.0
+    /*var positionX: Float = 0.0
     var positionY: Float = 0.0
     var positionZ: Float = 0.0
     
     var rotationX: Float = 0.0
     var rotationY: Float = 0.0
     var rotationZ: Float = 0.0
-    var scale: Float     = 1.0
+    var scale: Float     = 1.0*/
     
     init(_ metalDevice: MTLDevice) {
         self.metalDevice = metalDevice
@@ -35,9 +43,6 @@ class Renderer: NSObject, MTKViewDelegate {
         pipelineState = try! metalDevice.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
         
         commandQueue = metalDevice.makeCommandQueue()
-        
-        let sizeOfUniformsBuffer = MemoryLayout<Float>.size * float4x4.numberOfElements() * 2 + Light.size()
-        self.bufferProvider = BufferProvider(metalDevice: metalDevice, inflightBuffersCount: 3, sizeOfUniformsBuffer: sizeOfUniformsBuffer)
     }
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
@@ -79,10 +84,8 @@ class Renderer: NSObject, MTKViewDelegate {
         renderEncoder?.setFragmentTexture(scene.objectToDraw.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         
-        var nodeModelMatrix = self.modelMatrix()
-        nodeModelMatrix.multiplyLeft(matrix: scene.worldModelMatrix)
-
-        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: scene.projectionMatrix, modelViewMatrix: nodeModelMatrix, light: scene.light)
+ 
+        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: scene.projectionMatrix, modelViewMatrix: scene.nodeModelMatrix, light: scene.light)
         
         renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
         renderEncoder?.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
@@ -96,11 +99,11 @@ class Renderer: NSObject, MTKViewDelegate {
         commandBuffer?.commit()
     }
     
-    func modelMatrix() -> float4x4 {
+    /*func modelMatrix() -> float4x4 {
         var matrix = float4x4()
         matrix.translate(x: positionX, y: positionY, z: positionZ)
         matrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
         matrix.scale(x: scale, y: scale, z: scale)
         return matrix
-    }
+    }*/
 }
