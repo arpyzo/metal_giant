@@ -85,7 +85,7 @@ class Renderer: NSObject, MTKViewDelegate {
         renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         
  
-        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: scene.projectionMatrix, modelViewMatrix: scene.nodeModelMatrix, light: scene.light)
+        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: scene.projectionMatrix, modelViewMatrix: scene.modelViewMatrix, light: scene.light)
         
         renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
         renderEncoder?.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)

@@ -2,14 +2,12 @@ import MetalKit
 import QuartzCore
 import simd
 
-class Object {
-    let metalDevice: MTLDevice
-    var vertexCount: Int
-    var vertexBuffer: MTLBuffer
+class Cube: Node {
+    //let metalDevice: MTLDevice
     
     //var time:CFTimeInterval = 0.0
     
-    var texture: MTLTexture
+    //var texture: MTLTexture
     
     init(_ metalDevice: MTLDevice, _ textureLoader: MTKTextureLoader) {
         // Front
@@ -48,30 +46,30 @@ class Object {
         let W = Vertex(x: -1.0, y:  -1.0, z:  -1.0, r:  0.0, g:  0.0, b:  1.0, a:  1.0, s: 1.00, t: 0.50, nX: 0.0, nY: 0.0, nZ: -1.0)
         let X = Vertex(x: -1.0, y:   1.0, z:  -1.0, r:  0.1, g:  0.6, b:  0.4, a:  1.0, s: 1.00, t: 0.25, nX: 0.0, nY: 0.0, nZ: -1.0)
         
-        let vertices:Array<Vertex> = [
-            A,B,C, A,C,D,   //Front
-            E,F,G, E,G,H,   //Left
-            I,J,K, I,K,L,   //Right
-            M,N,O, M,O,P,   //Top
-            Q,R,S, Q,S,T,   //Bot
-            U,V,W, U,W,X    //Back
+        let vertices: Array<Vertex> = [
+            A,B,C, A,C,D,   // Front
+            E,F,G, E,G,H,   // Left
+            I,J,K, I,K,L,   // Right
+            M,N,O, M,O,P,   // Top
+            Q,R,S, Q,S,T,   // Bottom
+            U,V,W, U,W,X    // Back
         ]
         
-        let path = Bundle.main.path(forResource: "cube", ofType: "png")!
-        let texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
+        //let path = Bundle.main.path(forResource: "cube", ofType: "png")!
+        //let texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
 
-        var vertexData = Array<Float>()
-        for vertex in vertices{
-            vertexData += vertex.floatBuffer()
-        }
+        //var vertexData = Array<Float>()
+        //for vertex in vertices {
+        //    vertexData += vertex.floatBuffer()
+        //}
+
+        super.init(metalDevice, textureLoader, vertices)
+        //let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
+        //vertexBuffer = metalDevice.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
         
-        let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
-        vertexBuffer = metalDevice.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
+        //vertexCount = vertices.count
         
-        self.metalDevice = metalDevice
-        vertexCount = vertices.count
-        
-        self.texture = texture
+        //self.texture = texture
     }
     
     /*func updateWithDelta(delta: CFTimeInterval){

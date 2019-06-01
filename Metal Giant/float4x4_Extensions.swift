@@ -71,4 +71,14 @@ extension float4x4 {
         let result = GLKMatrix4Multiply(glMatrix1, glMatrix2)
         self = unsafeBitCast(result, to: float4x4.self)
     }
+    
+    func multiplyLeftCopy(matrix: float4x4) -> float4x4 {
+        var copy = self
+        let glMatrix1 = unsafeBitCast(matrix, to: GLKMatrix4.self)
+        let glMatrix2 = unsafeBitCast(self, to: GLKMatrix4.self)
+        let result = GLKMatrix4Multiply(glMatrix1, glMatrix2)
+        copy = unsafeBitCast(result, to: float4x4.self)
+        return copy
+     }
+
 }
