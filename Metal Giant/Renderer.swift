@@ -11,22 +11,9 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var scene: Scene! {
         didSet {
-            bufferProvider = BufferProvider(
-                metalDevice: metalDevice,
-                inflightBuffersCount: 3,
-                sizeOfUniformsBuffer: scene.sizeOfUniformsBuffer
-            )
+            bufferProvider = BufferProvider(metalDevice, bufferCount: 3, bufferSize: scene.uniformBufferSize)
         }
     }
-    
-    /*var positionX: Float = 0.0
-    var positionY: Float = 0.0
-    var positionZ: Float = 0.0
-    
-    var rotationX: Float = 0.0
-    var rotationY: Float = 0.0
-    var rotationZ: Float = 0.0
-    var scale: Float     = 1.0*/
     
     init(_ metalDevice: MTLDevice) {
         self.metalDevice = metalDevice
@@ -46,7 +33,7 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        scene.updateProjectionMatrix(Float(size.width / size.height))
+        scene.updateProjectionMatrix(aspectRatio: Float(size.width / size.height))
     }
     
     func draw(in view: MTKView) {
@@ -62,11 +49,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let renderPassDescriptor = MTLRenderPassDescriptor()
         renderPassDescriptor.colorAttachments[0].texture = drawable.texture
         renderPassDescriptor.colorAttachments[0].loadAction = .clear
-        // GREEN
-        //renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 104.0/255.0, blue: 5.0/255.0, alpha: 1.0)
-        // BLACK
-        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        
+        renderPassDescriptor.colorAttachments[0].clearColor = scene.clearColor
         renderPassDescriptor.colorAttachments[0].storeAction = .store
         
         _ = bufferProvider.avaliableResourcesSemaphore.wait(timeout: DispatchTime.distantFuture)
@@ -79,31 +62,20 @@ class Renderer: NSObject, MTKViewDelegate {
         let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         renderEncoder?.setCullMode(MTLCullMode.front)
         renderEncoder?.setRenderPipelineState(pipelineState)
-        renderEncoder?.setVertexBuffer(scene.objectToDraw.vertexBuffer, offset: 0, index: 0)
         
-        renderEncoder?.setFragmentTexture(scene.objectToDraw.texture, index: 0)
+        renderEncoder?.setVertexBuffer(scene.node.vertexBuffer, offset: 0, index: 0)
+        renderEncoder?.setFragmentTexture(scene.node.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         
- 
-        let uniformBuffer = bufferProvider.nextUniformsBuffer(projectionMatrix: scene.projectionMatrix, modelViewMatrix: scene.modelViewMatrix, light: scene.light)
-        
+        let uniformBuffer = bufferProvider.nextUniformBuffer(scene.projectionMatrix, scene.modelViewMatrix, scene.light)
         renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
         renderEncoder?.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
         
-        
-        renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.objectToDraw.vertexCount,
-                                      instanceCount: scene.objectToDraw.vertexCount/3)
+        renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.node.vertexCount,
+                                      instanceCount: scene.node.vertexCount/3)
         renderEncoder?.endEncoding()
         
         commandBuffer?.present(drawable)
         commandBuffer?.commit()
     }
-    
-    /*func modelMatrix() -> float4x4 {
-        var matrix = float4x4()
-        matrix.translate(x: positionX, y: positionY, z: positionZ)
-        matrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
-        matrix.scale(x: scale, y: scale, z: scale)
-        return matrix
-    }*/
 }

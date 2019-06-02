@@ -2,8 +2,6 @@ import MetalKit
 import simd
 
 class Node {
-    let metalDevice: MTLDevice
-
     var vertexData: Array<Float>
     var vertexBuffer: MTLBuffer
     var vertexCount: Int
@@ -20,15 +18,7 @@ class Node {
     
     var scale:     Float = 1.0
     
-    /*var modelMatrix: float4x4 {
-        get {
-            return modelMatrix().multiplyLeftCopy(matrix: worldModelMatrix)
-        }
-    }*/
-    
-    init(_ metalDevice: MTLDevice, _ textureLoader: MTKTextureLoader, _ vertices: Array<Vertex>) {
-        self.metalDevice = metalDevice
-        
+    init(_ metalDevice: MTLDevice, _ textureLoader: MTKTextureLoader, _ vertices: Array<Vertex>) {        
         let path = Bundle.main.path(forResource: "cube", ofType: "png")!
         texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
         
@@ -50,4 +40,16 @@ class Node {
         matrix.scale(x: scale, y: scale, z: scale)
         return matrix
     }
+    
+    /*func updateWithDelta(delta: CFTimeInterval) {
+        time += delta
+     }*/
+    
+    /*func updateWithDelta(delta: CFTimeInterval) {
+        super.updateWithDelta(delta: delta)
+     
+        let secsPerMove: Float = 6.0
+        rotationY = sinf(Float(time) * 2.0 * .pi / secsPerMove)
+        rotationX = sinf(Float(time) * 2.0 * .pi / secsPerMove)
+     }*/
 }

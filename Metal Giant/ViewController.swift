@@ -3,11 +3,10 @@ import MetalKit
 import simd
 
 class ViewController: UIViewController {
+    var metalDevice: MTLDevice!
     var mtkView: MTKView!
     var scene: Scene!
     var renderer: Renderer!
-
-    var metalDevice: MTLDevice!
     
     let panSensivity: Float = 5.0
     var lastPanLocation: CGPoint!
@@ -41,6 +40,7 @@ class ViewController: UIViewController {
         self.view.addGestureRecognizer(pan)
     }
     
+    // TODO: Rotate camera (view matrix), not node
     @objc func pan(panGesture: UIPanGestureRecognizer){
         if panGesture.state == UIGestureRecognizerState.changed {
             let pointInView = panGesture.location(in: self.view)
@@ -48,8 +48,8 @@ class ViewController: UIViewController {
             let xDelta = Float((lastPanLocation.x - pointInView.x)/self.view.bounds.width) * panSensivity
             let yDelta = Float((lastPanLocation.y - pointInView.y)/self.view.bounds.height) * panSensivity
             // 4
-            renderer.scene.objectToDraw.rotationY -= xDelta
-            renderer.scene.objectToDraw.rotationX -= yDelta
+            renderer.scene.node.rotationY -= xDelta
+            renderer.scene.node.rotationX -= yDelta
             lastPanLocation = pointInView
         } else if panGesture.state == UIGestureRecognizerState.began {
             lastPanLocation = panGesture.location(in: self.view)

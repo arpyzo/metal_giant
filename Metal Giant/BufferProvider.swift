@@ -5,32 +5,33 @@ import simd
 // Investigate buffer persistence
 
 class BufferProvider: NSObject {
-    let inflightBuffersCount: Int
-    private var uniformsBuffers: [MTLBuffer]
+    let bufferCount: Int
+    private var uniformBuffers: [MTLBuffer]
     private var avaliableBufferIndex: Int = 0
     var avaliableResourcesSemaphore: DispatchSemaphore
     
-    init(metalDevice: MTLDevice, inflightBuffersCount: Int, sizeOfUniformsBuffer: Int) {
+    init(_ metalDevice: MTLDevice, bufferCount: Int, bufferSize: Int) {
         
-        avaliableResourcesSemaphore = DispatchSemaphore(value: inflightBuffersCount)
+        avaliableResourcesSemaphore = DispatchSemaphore(value: bufferCount)
 
-        self.inflightBuffersCount = inflightBuffersCount
-        uniformsBuffers = [MTLBuffer]()
+        self.bufferCount = bufferCount
+        uniformBuffers = [MTLBuffer]()
         
-        for _ in 0...inflightBuffersCount - 1 {
-            let uniformsBuffer = metalDevice.makeBuffer(length: sizeOfUniformsBuffer, options: [])
-            uniformsBuffers.append(uniformsBuffer!)
+        for _ in 0...bufferCount - 1 {
+            let uniformBuffer = metalDevice.makeBuffer(length: bufferSize, options: [])
+            uniformBuffers.append(uniformBuffer!)
         }
     }
     
     deinit {
-        for _ in 0...self.inflightBuffersCount {
+        for _ in 0...self.bufferCount {
             self.avaliableResourcesSemaphore.signal()
         }
     }
     
-    func nextUniformsBuffer(projectionMatrix: float4x4, modelViewMatrix: float4x4, light: Light) -> MTLBuffer {
-        let buffer = uniformsBuffers[avaliableBufferIndex]
+    // TODO: Should buffer provider be filling buffers with data?
+    func nextUniformBuffer(_ projectionMatrix: float4x4, _ modelViewMatrix: float4x4, _ light: Light) -> MTLBuffer {
+        let buffer = uniformBuffers[avaliableBufferIndex]
         
         let bufferPointer = buffer.contents()
         
@@ -46,7 +47,7 @@ class BufferProvider: NSObject {
         memcpy(bufferPointer + 2*MemoryLayout<Float>.size * float4x4.numberOfElements(), light.raw(), Light.size())
         
         avaliableBufferIndex += 1
-        if avaliableBufferIndex == inflightBuffersCount {
+        if avaliableBufferIndex == bufferCount {
             avaliableBufferIndex = 0
         }
         

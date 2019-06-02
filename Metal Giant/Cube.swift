@@ -3,11 +3,7 @@ import QuartzCore
 import simd
 
 class Cube: Node {
-    //let metalDevice: MTLDevice
-    
     //var time:CFTimeInterval = 0.0
-    
-    //var texture: MTLTexture
     
     init(_ metalDevice: MTLDevice, _ textureLoader: MTKTextureLoader) {
         // Front
@@ -55,32 +51,6 @@ class Cube: Node {
             U,V,W, U,W,X    // Back
         ]
         
-        //let path = Bundle.main.path(forResource: "cube", ofType: "png")!
-        //let texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
-
-        //var vertexData = Array<Float>()
-        //for vertex in vertices {
-        //    vertexData += vertex.floatBuffer()
-        //}
-
         super.init(metalDevice, textureLoader, vertices)
-        //let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
-        //vertexBuffer = metalDevice.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
-        
-        //vertexCount = vertices.count
-        
-        //self.texture = texture
     }
-    
-    /*func updateWithDelta(delta: CFTimeInterval){
-        time += delta
-    }*/
-    
-    /*func updateWithDelta(delta: CFTimeInterval) {
-        super.updateWithDelta(delta: delta)
-        
-        let secsPerMove: Float = 6.0
-        rotationY = sinf( Float(time) * 2.0 * .pi / secsPerMove)
-        rotationX = sinf( Float(time) * 2.0 * .pi / secsPerMove)
-    }*/
 }
