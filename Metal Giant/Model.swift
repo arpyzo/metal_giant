@@ -2,7 +2,6 @@ import MetalKit
 import simd
 
 class Model {
-    var vertexData: Array<Float>
     var vertexBuffer: MTLBuffer
     var vertexCount: Int
     
@@ -18,19 +17,12 @@ class Model {
     
     var scale:     Float = 1.0
     
-    init(_ metalDevice: MTLDevice, _ textureLoader: MTKTextureLoader, _ vertices: Array<Vertex>) {        
-        let path = Bundle.main.path(forResource: "cube", ofType: "png")!
-        texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
+    // TODO: make modelLibrary a static member?
+    init(_ modelLibrary: ModelLibrary) {
+        vertexBuffer = modelLibrary.models["cube"]!.vertexBuffer
+        vertexCount = modelLibrary.models["cube"]!.vertexCount
         
-        vertexData = Array<Float>()
-        for vertex in vertices {
-            vertexData += vertex.floatBuffer()
-        }
-
-        let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
-        vertexBuffer = metalDevice.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
-        
-        vertexCount = vertices.count
+        texture = modelLibrary.models["cube"]!.texture
     }
     
     func modelMatrix() -> float4x4 {

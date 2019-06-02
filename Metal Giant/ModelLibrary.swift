@@ -1,9 +1,21 @@
 import MetalKit
-import QuartzCore
-import simd
 
-class Cube: Model {
-    init(_ metalDevice: MTLDevice, _ textureLoader: MTKTextureLoader) {
+// TODO: explore Hashable
+struct ModelData {
+    var vertices: Array<Vertex>
+    var vertexData: Array<Float>
+    var vertexCount: Int
+    var vertexBuffer: MTLBuffer
+    
+    var texture: MTLTexture
+}
+
+class ModelLibrary {
+    var models: [String: ModelData] = [:]
+    
+    // TODO: preload models?
+    // TODO: performance - minimize copying
+    init(_ metalDevice: MTLDevice) {
         // Front
         let A = Vertex(x: -1.0, y:   1.0, z:   1.0, r:  1.0, g:  0.0, b:  0.0, a:  1.0, tx: 0.25, ty: 0.25, nx: 0.0, ny: 0.0, nz: 1.0)
         let B = Vertex(x: -1.0, y:  -1.0, z:   1.0, r:  0.0, g:  1.0, b:  0.0, a:  1.0, tx: 0.25, ty: 0.50, nx: 0.0, ny: 0.0, nz: 1.0)
@@ -40,7 +52,7 @@ class Cube: Model {
         let W = Vertex(x: -1.0, y:  -1.0, z:  -1.0, r:  0.0, g:  0.0, b:  1.0, a:  1.0, tx: 1.00, ty: 0.50, nx: 0.0, ny: 0.0, nz: -1.0)
         let X = Vertex(x: -1.0, y:   1.0, z:  -1.0, r:  0.1, g:  0.6, b:  0.4, a:  1.0, tx: 1.00, ty: 0.25, nx: 0.0, ny: 0.0, nz: -1.0)
         
-        let vertices: Array<Vertex> = [
+        let vertices = [
             A,B,C, A,C,D,   // Front
             E,F,G, E,G,H,   // Left
             I,J,K, I,K,L,   // Right
@@ -49,6 +61,18 @@ class Cube: Model {
             U,V,W, U,W,X    // Back
         ]
         
-        super.init(metalDevice, textureLoader, vertices)
+        var vertexData = Array<Float>()
+        for vertex in vertices {
+            vertexData += vertex.floatBuffer()
+        }        
+        
+        let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
+        let vertexBuffer = metalDevice.makeBuffer(bytes: vertexData, length: dataSize, options: [])!
+        
+        let textureLoader = MTKTextureLoader(device: metalDevice)
+        let path = Bundle.main.path(forResource: "cube", ofType: "png")!
+        let texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
+        
+        models["cube"] = ModelData(vertices: vertices, vertexData: vertexData, vertexCount: vertices.count, vertexBuffer: vertexBuffer, texture: texture)
     }
 }

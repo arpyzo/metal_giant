@@ -3,9 +3,9 @@ import MetalKit
 class Scene {
     var projectionMatrix: float4x4!
     var viewMatrix: float4x4!
-    var model: Model!
     
-    var textureLoader: MTKTextureLoader!
+    var modelLibrary: ModelLibrary!
+    var model: Model!
     
     var clearColor: MTLClearColor
     var light: Light
@@ -35,8 +35,10 @@ class Scene {
         viewMatrix.translate(x: 0.0, y: 0.0, z: -4)
         viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
-        textureLoader = MTKTextureLoader(device: metalDevice)
-        model = Cube(metalDevice, textureLoader)
+        // TODO: move modelLibrary into Model as static member
+        // TODO: instantiate model with specific name
+        modelLibrary = ModelLibrary(metalDevice)
+        model = Model(modelLibrary)
     }
     
     func updateProjectionMatrix(aspectRatio: Float) {
@@ -47,15 +49,15 @@ class Scene {
         )
     }
     
-    /*func updateWithDelta(delta: CFTimeInterval){
-     time += delta
-     }*/
-    
     /*func updateWithDelta(delta: CFTimeInterval) {
-     super.updateWithDelta(delta: delta)
+        time += delta
+    }
+    
+    func updateWithDelta(delta: CFTimeInterval) {
+        super.updateWithDelta(delta: delta)
      
-     let secsPerMove: Float = 6.0
-     rotationY = sinf( Float(time) * 2.0 * .pi / secsPerMove)
-     rotationX = sinf( Float(time) * 2.0 * .pi / secsPerMove)
+        let secsPerMove: Float = 6.0
+        rotationY = sinf( Float(time) * 2.0 * .pi / secsPerMove)
+        rotationX = sinf( Float(time) * 2.0 * .pi / secsPerMove)
      }*/
 }

@@ -4,14 +4,14 @@
 
 using namespace metal;
 
-struct VertexIn{
+struct VertexIn {
     packed_float3 position;
     packed_float4 color;
     packed_float2 texCoord;
     packed_float3 normal;
 };
 
-struct VertexOut{
+struct VertexOut {
     float4 position [[position]];
     float3 fragmentPosition;
     float4 color;
@@ -19,7 +19,7 @@ struct VertexOut{
     float3 normal;
 };
 
-struct Light{
+struct Light {
     packed_float3 color;
     float ambientIntensity;
     packed_float3 direction;
@@ -28,7 +28,7 @@ struct Light{
     float specularIntensity;
 };
 
-struct Uniforms{
+struct Uniforms {
     float4x4 modelMatrix;
     float4x4 projectionMatrix;
     Light light;
