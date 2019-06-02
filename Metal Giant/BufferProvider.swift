@@ -29,7 +29,7 @@ class BufferProvider: NSObject {
         }
     }
     
-    // TODO: Should buffer provider be filling buffers with data?
+    // TODO: should buffer provider be filling buffers with data?
     func nextUniformBuffer(_ projectionMatrix: float4x4, _ modelViewMatrix: float4x4, _ light: Light) -> MTLBuffer {
         let buffer = uniformBuffers[avaliableBufferIndex]
         

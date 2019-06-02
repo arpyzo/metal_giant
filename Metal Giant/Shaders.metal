@@ -30,7 +30,7 @@ struct Light {
 
 struct Uniforms {
     float4x4 modelMatrix;
-    float4x4 projectionMatrix;
+    float4x4 viewProjectionMatrix;
     Light light;
 };
 
@@ -38,18 +38,18 @@ vertex VertexOut basic_vertex(const device VertexIn* vertex_array [[ buffer(0) ]
                               const device Uniforms&  uniforms    [[ buffer(1) ]],
                               unsigned int vid [[ vertex_id ]]) {
     
-    float4x4 mv_Matrix = uniforms.modelMatrix;
-    float4x4 proj_Matrix = uniforms.projectionMatrix;
+    float4x4 model_Matrix = uniforms.modelMatrix;
+    float4x4 proj_Matrix = uniforms.viewProjectionMatrix;
     
     VertexIn VertexIn = vertex_array[vid];
     
     VertexOut VertexOut;
-    VertexOut.position = proj_Matrix * mv_Matrix * float4(VertexIn.position,1);
-    VertexOut.fragmentPosition = (mv_Matrix * float4(VertexIn.position,1)).xyz;
+    VertexOut.position = proj_Matrix * model_Matrix * float4(VertexIn.position,1);
+    VertexOut.fragmentPosition = (model_Matrix * float4(VertexIn.position,1)).xyz;
     VertexOut.color = VertexIn.color;
-    // 2
+    
     VertexOut.texCoord = VertexIn.texCoord;
-    VertexOut.normal = (mv_Matrix * float4(VertexIn.normal, 0.0)).xyz;
+    VertexOut.normal = (model_Matrix * float4(VertexIn.normal, 0.0)).xyz;
 
     
     return VertexOut;

@@ -1,7 +1,7 @@
 import MetalKit
 import simd
 
-class Model {
+class Node {
     var vertexBuffer: MTLBuffer
     var vertexCount: Int
     
@@ -17,21 +17,37 @@ class Model {
     
     var scale:     Float = 1.0
     
+    var modelMatrix: float4x4
+    
     // TODO: make modelLibrary a static member?
     init(_ modelLibrary: ModelLibrary) {
         vertexBuffer = modelLibrary.models["cube"]!.vertexBuffer
         vertexCount = modelLibrary.models["cube"]!.vertexCount
         
         texture = modelLibrary.models["cube"]!.texture
+        
+        // TODO: replace with updateModelMatrix
+        modelMatrix = float4x4()
+        modelMatrix.translate(x: positionX, y: positionY, z: positionZ)
+        modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.scale(x: scale, y: scale, z: scale)
+
     }
     
-    func modelMatrix() -> float4x4 {
+    func updateModelMatrix() {
+        modelMatrix = float4x4()
+        modelMatrix.translate(x: positionX, y: positionY, z: positionZ)
+        modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.scale(x: scale, y: scale, z: scale)
+    }
+    
+    /*func modelMatrix() -> float4x4 {
         var matrix = float4x4()
         matrix.translate(x: positionX, y: positionY, z: positionZ)
         matrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
         matrix.scale(x: scale, y: scale, z: scale)
         return matrix
-    }
+    }*/
     
     /*func updateWithDelta(delta: CFTimeInterval) {
         time += delta
