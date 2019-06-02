@@ -1,10 +1,10 @@
 struct Vertex {
-    var x,y,z: Float     // position data
-    var r,g,b,a: Float   // color data
-    var s,t: Float       // texture coordinates
-    var nX,nY,nZ: Float  // normal
+    var x, y, z: Float     // position
+    var r, g, b, a: Float  // color
+    var tx, ty: Float      // texture coordinates
+    var nx, ny, nz: Float  // normal for lighting
     
     func floatBuffer() -> [Float] {
-        return [x,y,z,r,g,b,a,s,t,nX,nY,nZ]
+        return [x, y, z, r, g, b, a, tx, ty, nx, ny, nz]
     }
 }
