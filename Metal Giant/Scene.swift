@@ -3,7 +3,7 @@ import MetalKit
 class Scene {
     var projectionMatrix: float4x4!
     var viewMatrix: float4x4!
-    var node: Node!
+    var model: Model!
     
     var textureLoader: MTKTextureLoader!
     
@@ -15,7 +15,7 @@ class Scene {
     // TODO: multiply model and view matrices in shader?
     var modelViewMatrix: float4x4 {
         get {
-            return node.modelMatrix().multiplyLeftCopy(matrix: viewMatrix)
+            return model.modelMatrix().multiplyLeftCopy(matrix: viewMatrix)
         }
     }
     
@@ -36,7 +36,7 @@ class Scene {
         viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
         textureLoader = MTKTextureLoader(device: metalDevice)
-        node = Cube(metalDevice, textureLoader)
+        model = Cube(metalDevice, textureLoader)
     }
     
     func updateProjectionMatrix(aspectRatio: Float) {

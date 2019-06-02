@@ -48,8 +48,8 @@ class ViewController: UIViewController {
             let xDelta = Float((lastPanLocation.x - pointInView.x)/self.view.bounds.width) * panSensivity
             let yDelta = Float((lastPanLocation.y - pointInView.y)/self.view.bounds.height) * panSensivity
             // 4
-            renderer.scene.node.rotationY -= xDelta
-            renderer.scene.node.rotationX -= yDelta
+            renderer.scene.model.rotationY -= xDelta
+            renderer.scene.model.rotationX -= yDelta
             lastPanLocation = pointInView
         } else if panGesture.state == UIGestureRecognizerState.began {
             lastPanLocation = panGesture.location(in: self.view)

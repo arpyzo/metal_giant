@@ -1,7 +1,7 @@
 import MetalKit
 import simd
 
-class Node {
+class Model {
     var vertexData: Array<Float>
     var vertexBuffer: MTLBuffer
     var vertexCount: Int

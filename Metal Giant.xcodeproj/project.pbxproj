@@ -15,7 +15,7 @@
 		D777B189215344500050D542 /* float4x4_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D777B188215344500050D542 /* float4x4_Extensions.swift */; };
 		D78D87C6212A8AE4001EA8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */; };
 		D78D87D0212A8AE5001EA8BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D78D87CE212A8AE5001EA8BD /* LaunchScreen.storyboard */; };
-		D7A3BC4722A2387400FA940F /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A3BC4622A2387400FA940F /* Node.swift */; };
+		D7A3BC4722A2387400FA940F /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A3BC4622A2387400FA940F /* Model.swift */; };
 		D7EAC5F22135027700B9827C /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EAC5F12135027700B9827C /* Vertex.swift */; };
 		D7EAC5F4213502AE00B9827C /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EAC5F3213502AE00B9827C /* Cube.swift */; };
 		D7EDC34E2145E7F400DCC012 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EDC34D2145E7F400DCC012 /* ViewController.swift */; };
@@ -33,7 +33,7 @@
 		D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D78D87CF212A8AE5001EA8BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D78D87D1212A8AE5001EA8BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D7A3BC4622A2387400FA940F /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		D7A3BC4622A2387400FA940F /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		D7EAC5F12135027700B9827C /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
 		D7EAC5F3213502AE00B9827C /* Cube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
 		D7EDC34D2145E7F400DCC012 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -83,7 +83,7 @@
 				D7EDC34F2145EE6100DCC012 /* BufferProvider.swift */,
 				D75A526F214D9FE000D0BD39 /* Light.swift */,
 				D770F519229B53A800F06E66 /* Scene.swift */,
-				D7A3BC4622A2387400FA940F /* Node.swift */,
+				D7A3BC4622A2387400FA940F /* Model.swift */,
 			);
 			path = "Metal Giant";
 			sourceTree = "<group>";
@@ -162,7 +162,7 @@
 				D777B189215344500050D542 /* float4x4_Extensions.swift in Sources */,
 				D7EDC3502145EE6100DCC012 /* BufferProvider.swift in Sources */,
 				D7EDC34E2145E7F400DCC012 /* ViewController.swift in Sources */,
-				D7A3BC4722A2387400FA940F /* Node.swift in Sources */,
+				D7A3BC4722A2387400FA940F /* Model.swift in Sources */,
 				D75456E6212E86CD00EFC86F /* Shaders.metal in Sources */,
 				D770F518229B529B00F06E66 /* Renderer.swift in Sources */,
 				D75A5270214D9FE000D0BD39 /* Light.swift in Sources */,

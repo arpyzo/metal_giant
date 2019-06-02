@@ -63,16 +63,16 @@ class Renderer: NSObject, MTKViewDelegate {
         renderEncoder?.setCullMode(MTLCullMode.front)
         renderEncoder?.setRenderPipelineState(pipelineState)
         
-        renderEncoder?.setVertexBuffer(scene.node.vertexBuffer, offset: 0, index: 0)
-        renderEncoder?.setFragmentTexture(scene.node.texture, index: 0)
+        renderEncoder?.setVertexBuffer(scene.model.vertexBuffer, offset: 0, index: 0)
+        renderEncoder?.setFragmentTexture(scene.model.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         
         let uniformBuffer = bufferProvider.nextUniformBuffer(scene.projectionMatrix, scene.modelViewMatrix, scene.light)
         renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
         renderEncoder?.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
         
-        renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.node.vertexCount,
-                                      instanceCount: scene.node.vertexCount/3)
+        renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.model.vertexCount,
+                                      instanceCount: scene.model.vertexCount/3)
         renderEncoder?.endEncoding()
         
         commandBuffer?.present(drawable)
