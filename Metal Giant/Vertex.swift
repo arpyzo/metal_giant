@@ -5,6 +5,7 @@ struct Vertex {
     var nx, ny, nz: Float  // normal for lighting
     
     func floatBuffer() -> [Float] {
+        //return [x, y, z, tx, ty, nx, ny, nz]
         return [x, y, z, r, g, b, a, tx, ty, nx, ny, nz]
     }
 }

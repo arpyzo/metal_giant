@@ -2,11 +2,9 @@ import MetalKit
 import simd
 
 class Node {
-    var vertexBuffer: MTLBuffer
-    var vertexCount: Int
-    
-    var texture: MTLTexture
-    
+    var modelMesh: ModelMesh
+    var modelTexture: ModelTexture
+
     var positionX: Float = 0.0
     var positionY: Float = 0.0
     var positionZ: Float = 0.0
@@ -21,17 +19,14 @@ class Node {
     
     // TODO: make modelLibrary a static member?
     init(_ modelLibrary: ModelLibrary) {
-        vertexBuffer = modelLibrary.models["cube"]!.vertexBuffer
-        vertexCount = modelLibrary.models["cube"]!.vertexCount
-        
-        texture = modelLibrary.models["cube"]!.texture
-        
+        modelMesh = modelLibrary.modelMeshes["cube"]!
+        modelTexture = modelLibrary.modelTextures["cube"]!
+
         // TODO: replace with updateModelMatrix
         modelMatrix = float4x4()
         modelMatrix.translate(x: positionX, y: positionY, z: positionZ)
         modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
         modelMatrix.scale(x: scale, y: scale, z: scale)
-
     }
     
     func updateModelMatrix() {
