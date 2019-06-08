@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     
     // TODO: Rotate camera (view matrix), not node
     @objc func pan(panGesture: UIPanGestureRecognizer){
-        if panGesture.state == UIGestureRecognizerState.changed {
+        if panGesture.state == UIGestureRecognizer.State.changed {
             let pointInView = panGesture.location(in: self.view)
             // 3
             let xDelta = Float((lastPanLocation.x - pointInView.x)/self.view.bounds.width) * panSensivity
@@ -52,7 +52,7 @@ class ViewController: UIViewController {
             renderer.scene.node.rotationX -= yDelta
             renderer.scene.node.updateModelMatrix()
             lastPanLocation = pointInView
-        } else if panGesture.state == UIGestureRecognizerState.began {
+        } else if panGesture.state == UIGestureRecognizer.State.began {
             lastPanLocation = panGesture.location(in: self.view)
         }
     }
