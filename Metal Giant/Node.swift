@@ -38,6 +38,7 @@ class Node {
         //modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
         modelMatrix.makeRotationMatrixX(x: rotationX, y: rotationY, z: rotationZ)
         modelMatrix.makeRotationMatrixY(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.makeRotationMatrixZ(x: rotationX, y: rotationY, z: rotationZ)
         modelMatrix.scale(x: scale, y: scale, z: scale)
     }
     

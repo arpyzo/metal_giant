@@ -28,8 +28,9 @@ class Scene {
                 
         viewMatrix = float4x4()
         viewMatrix.translate(x: 0.0, y: 0.0, z: -4)
-        viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
-        
+        //viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
+        viewMatrix.makeRotationMatrixX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
+
         viewProjectionMatrix = projectionMatrix * viewMatrix
         
         // TODO: move modelLibrary into Model as static member
