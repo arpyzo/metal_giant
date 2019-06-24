@@ -25,20 +25,18 @@ class Node {
         // TODO: replace with updateModelMatrix
         modelMatrix = float4x4()
         modelMatrix.translate(x: positionX, y: positionY, z: positionZ)
-        //modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.makeRotationMatrixX(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.makeRotationMatrixY(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.makeRotationMatrixZ(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.rotateAroundY(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.rotateAroundZ(x: rotationX, y: rotationY, z: rotationZ)
         modelMatrix.scale(x: scale, y: scale, z: scale)
     }
     
     func updateModelMatrix() {
         modelMatrix = float4x4()
         modelMatrix.translate(x: positionX, y: positionY, z: positionZ)
-        //modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.makeRotationMatrixX(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.makeRotationMatrixY(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.makeRotationMatrixZ(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.rotateAroundY(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.rotateAroundZ(x: rotationX, y: rotationY, z: rotationZ)
         modelMatrix.scale(x: scale, y: scale, z: scale)
     }
     

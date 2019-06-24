@@ -12,73 +12,80 @@ extension float4x4 {
     static func degrees(toRad angle: Float) -> Float {
         return Float(Double(angle) * .pi / 180)
     }
-  
-    static func makeScale(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
-        let rows = [
-            simd_float4( x,       0, 0, 0),
-            simd_float4( 0, y, 0, 0),
-            simd_float4( 0, 0,  z, 0),
-            simd_float4( 0, 0,  0, 1.0)
-        ]
-        
-        let scaleMatrix = float4x4(rows: rows)
-
-        return scaleMatrix
-    }
     
-    mutating func makeRotationMatrixX(x: Float, y: Float, z: Float) {
-        let rows = [
-            simd_float4( 1.0,       0, 0, 0),
-            simd_float4( 0, cos(x), -sin(x), 0),
-            simd_float4( 0, sin(x),  cos(x), 0),
-            simd_float4( 0, 0,  0, 1.0)
-        ]
+    static func makeTranslationMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+        let translationMatrix = float4x4([
+            float4(1, 0, 0, 0),
+            float4(0, 1, 0, 0),
+            float4(0, 0, 1, 0),
+            float4(x, y, z, 1)
+        ]);
         
-        let rotationMatrix = float4x4(rows: rows)
-        
-        self = self * rotationMatrix
+        return translationMatrix
     }
-    
-    mutating func makeRotationMatrixY(x: Float, y: Float, z: Float) {
-        let rows = [
-            simd_float4( cos(y),       0, sin(y), 0),
-            simd_float4( 0, 1, 0, 0),
-            simd_float4( -sin(y),  0, cos(y), 0),
-            simd_float4( 0, 0,  0, 1.0)
-        ]
-        
-        let rotationMatrix = float4x4(rows: rows)
-        
-        self = self * rotationMatrix
-    }
-    
-    mutating func makeRotationMatrixZ(x: Float, y: Float, z: Float) {
-        let rows = [
-            simd_float4( cos(z),       -sin(z), Float(0), Float(0)),
-            simd_float4( sin(z),  cos(z), Float(0), Float(0)),
-            simd_float4(0.0, 0, 1.0, 0),
-            simd_float4( 0, 0,  0, 1.0)
-        ]
-        
-        let rotationMatrix = float4x4(rows: rows)
-        
-        self = self * rotationMatrix
-    }
-
-
     
     mutating func translate(x: Float, y: Float, z: Float) {
-        self = self * makeTranslationMatrix(x, y, z)
+        self = self * float4x4.makeTranslationMatrix(x, y, z)
+    }
+
+    static func makeXRotationMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+        let rotationMatrix = float4x4([
+            float4(1,       0,      0, 0),
+            float4(0,  cos(x), sin(x), 0),
+            float4(0, -sin(x), cos(x), 0),
+            float4(0,       0,      0, 1)
+        ]);
+        
+        return rotationMatrix
     }
     
-    func makeTranslationMatrix(_ tx: Float, _ ty: Float, _ tz: Float) -> simd_float4x4 {
-        var matrix = matrix_identity_float4x4
-                
-        matrix[3, 0] = tx
-        matrix[3, 1] = ty
-        matrix[3, 2] = tz
+    mutating func rotateAroundX(x: Float, y: Float, z: Float) {
+        self = self * float4x4.makeXRotationMatrix(x, y, z)
+    }
 
-        return matrix
+    static func makeYRotationMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+        let rotationMatrix = float4x4([
+            float4(cos(y), 0, -sin(y), 0),
+            float4(     0, 1,       0, 0),
+            float4(sin(y), 0,  cos(y), 0),
+            float4(     0, 0,       0, 1)
+        ]);
+        
+        return rotationMatrix
+    }
+
+    mutating func rotateAroundY(x: Float, y: Float, z: Float) {
+        self = self * float4x4.makeYRotationMatrix(x, y, z)
+    }
+
+    static func makeZRotationMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+        let rotationMatrix = float4x4([
+            float4( cos(z), sin(z), 0, 0),
+            float4(-sin(z), cos(z), 0, 0),
+            float4(      0,      0, 1, 0),
+            float4(      0,      0, 0, 1)
+        ]);
+        
+        return rotationMatrix
+    }
+
+    mutating func rotateAroundZ(x: Float, y: Float, z: Float) {
+        self = self * float4x4.makeZRotationMatrix(x, y, z)
+    }
+
+    static func makeScalingMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+        let scalingMatrix = float4x4([
+            float4(x, 0, 0, 0),
+            float4(0, y, 0, 0),
+            float4(0, 0, z, 0),
+            float4(0, 0, 0, 1)
+        ]);
+        
+        return scalingMatrix
+    }
+    
+    mutating func scale(x: Float, y: Float, z: Float) {
+        self = self * float4x4.makeScalingMatrix(x, y, z)
     }
     
     static func makePerspectiveViewAngle(fovyRadians: Float, aspectRatio: Float, nearZ: Float, farZ: Float) -> float4x4 {
@@ -98,10 +105,6 @@ extension float4x4 {
         q[2][2] = zs
         q[3][2] = zs * nearZ
         return q
-    }
-    
-    mutating func scale(x: Float, y: Float, z: Float) {
-        self = self * float4x4.makeScale(x, y, z)
     }
 }
 
