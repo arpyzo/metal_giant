@@ -88,23 +88,18 @@ extension float4x4 {
         self = self * float4x4.makeScalingMatrix(x, y, z)
     }
     
-    static func makePerspectiveViewAngle(fovyRadians: Float, aspectRatio: Float, nearZ: Float, farZ: Float) -> float4x4 {
+    static func makeProjectionMatrix(fovyRadians: Float, aspectRatio: Float, nearZ: Float, farZ: Float) -> float4x4 {
         
-        let cotan = 1.0 / tanf(fovyRadians / 2.0);
+        let scale = 1.0 / tanf(fovyRadians / 2.0);
         
-        let rows = [
-            simd_float4( cotan / aspectRatio, 0.0, 0.0, 0.0),
-            simd_float4( 0.0, cotan, 0.0, 0.0),
-            simd_float4(0.0, 0.0, (farZ + nearZ) / (nearZ - farZ), (2.0 * farZ * nearZ) / (nearZ - farZ)),
-            simd_float4( 0.0, 0.0, -1.0, 0.0)
-        ]
+        let projectionMatrix = float4x4([
+            float4(scale / aspectRatio,     0,                               0,  0),
+            float4(                  0, scale,                               0,  0),
+            float4(                  0,     0,           farZ / (nearZ - farZ), -1),
+            float4(                  0,     0, (farZ * nearZ) / (nearZ - farZ),  0)
+        ]);
         
-        var q = float4x4(rows: rows)
-        
-        let zs = farZ / (nearZ - farZ)
-        q[2][2] = zs
-        q[3][2] = zs * nearZ
-        return q
+        return projectionMatrix
     }
 }
 

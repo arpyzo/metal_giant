@@ -33,7 +33,7 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        scene.updateProjectionMatrix(aspectRatio: Float(size.width / size.height))
+        scene.updateViewProjectionMatrix(aspectRatio: Float(size.width / size.height))
     }
     
     func draw(in view: MTKView) {
