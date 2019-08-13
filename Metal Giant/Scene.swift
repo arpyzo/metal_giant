@@ -13,7 +13,10 @@ class Scene {
     
     let uniformBufferSize = MemoryLayout<Float>.size * float4x4.numberOfElements() * 2 + Light.size()
 
-    init(_ metalDevice: MTLDevice, _ aspectRatio: Float) {
+    init(_ metalDevice: MTLDevice, _ modelLibrary: ModelLibrary, _ aspectRatio: Float) {
+        // TODO: get light from lightLibrary
+        // TODO: get clearColor from elsewhere
+        
         clearColor = MTLClearColor(red: 0.0, green: 104.0/255.0, blue: 5.0/255.0, alpha: 1.0)
         light = Light(color: (1.0, 1.0, 1.0), ambientIntensity: 0.1, direction: (0.0, 0.0, 1.0),
                       diffuseIntensity: 0.8, shininess: 10, specularIntensity: 2)
@@ -23,12 +26,8 @@ class Scene {
         viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
         updateViewProjectionMatrix(aspectRatio: aspectRatio)
-        
-        // TODO: move modelLibrary into Model as static member
-        // TODO: instantiate model with specific name
-        //modelLibrary = ModelLibrary(metalDevice)
-        //node = Node(modelLibrary)
-        node = Node(metalDevice)
+                
+        node = modelLibrary.makeNode("cube")
     }
     
     func updateViewProjectionMatrix(aspectRatio: Float) {

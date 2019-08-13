@@ -5,6 +5,7 @@ import simd
 class ViewController: UIViewController {
     var metalDevice: MTLDevice!
     var mtkView: MTKView!
+    var modelLibrary: ModelLibrary!
     var scene: Scene!
     var renderer: Renderer!
     
@@ -18,18 +19,15 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("STUFF AND THINGS")
-        let blinky1 = Singleton.shared()
-        let blinky2 = Singleton.shared()
-
+                
         metalDevice = MTLCreateSystemDefaultDevice()
         mtkView.device = metalDevice
         
         renderer = Renderer(metalDevice)
         mtkView.delegate = renderer
-
-        scene = Scene(metalDevice, Float(self.view.bounds.size.width / self.view.bounds.size.height))
+        
+        modelLibrary = ModelLibrary(metalDevice)
+        scene = Scene(metalDevice, modelLibrary, Float(self.view.bounds.size.width / self.view.bounds.size.height))
         renderer.scene = scene
         
         setupGestures()

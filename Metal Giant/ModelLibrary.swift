@@ -11,13 +11,19 @@ class ModelTexture {
     var texture: MTLTexture!
 }
 
+// TODO: remove model from modelMeshes & modelTextures
+
 class ModelLibrary {
+    var metalDevice: MTLDevice
+    
     var modelMeshes: [String: ModelMesh] = [:]
     var modelTextures: [String: ModelTexture] = [:]
     
     // TODO: preload models?
     // TODO: performance - minimize copying
     init(_ metalDevice: MTLDevice) {
+        self.metalDevice = metalDevice
+        
         // Front
         /*let A = Vertex(x: -1.0, y:  1.0, z:  1.0, tx: 0.25, ty: 0.25, nx:  0.0, ny:  0.0, nz:  1.0)
         let B = Vertex(x: -1.0, y: -1.0, z:  1.0, tx: 0.25, ty: 0.50, nx:  0.0, ny:  0.0, nz:  1.0)
@@ -115,5 +121,9 @@ class ModelLibrary {
         
         modelTextures["cube"] = ModelTexture()
         modelTextures["cube"]!.texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
+    }
+    
+    func makeNode(_ nameName: String) -> Node {
+        return Node(modelMeshes["cube"]!, modelTextures["cube"]!)
     }
 }

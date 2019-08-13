@@ -1,9 +1,6 @@
-import MetalKit
 import simd
 
 class Node {
-    static var modelLibrary: ModelLibrary!
-    
     var modelMesh: ModelMesh
     var modelTexture: ModelTexture
 
@@ -19,14 +16,9 @@ class Node {
     
     var modelMatrix: float4x4 = float4x4()
     
-    // TODO: make modelLibrary a static member?
-    // TODO: remove metalDevice requirement
-    //init(_ modelLibrary: ModelLibrary) {
-    init(_ metalDevice: MTLDevice) {
-        Node.modelLibrary = ModelLibrary(metalDevice)
-        
-        modelMesh = Node.modelLibrary.modelMeshes["cube"]!
-        modelTexture = Node.modelLibrary.modelTextures["cube"]!
+    init(_ modelMesh: ModelMesh, _ modelTexture: ModelTexture) {
+        self.modelMesh = modelMesh
+        self.modelTexture = modelTexture
 
         self.updateModelMatrix()
     }
