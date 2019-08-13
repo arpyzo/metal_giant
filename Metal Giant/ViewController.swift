@@ -19,6 +19,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("STUFF AND THINGS")
+        let blinky1 = Singleton.shared()
+        let blinky2 = Singleton.shared()
+
         metalDevice = MTLCreateSystemDefaultDevice()
         mtkView.device = metalDevice
         
@@ -35,13 +39,13 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    func setupGestures(){
+    func setupGestures() {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(ViewController.pan))
         self.view.addGestureRecognizer(pan)
     }
     
     // TODO: Rotate camera (view matrix), not node
-    @objc func pan(panGesture: UIPanGestureRecognizer){
+    @objc func pan(panGesture: UIPanGestureRecognizer) {
         if panGesture.state == UIGestureRecognizer.State.changed {
             let pointInView = panGesture.location(in: self.view)
             // 3
@@ -56,4 +60,16 @@ class ViewController: UIViewController {
             lastPanLocation = panGesture.location(in: self.view)
         }
     }
+    
+    /*func updateWithDelta(delta: CFTimeInterval) {
+     time += delta
+     }
+     
+     func updateWithDelta(delta: CFTimeInterval) {
+     super.updateWithDelta(delta: delta)
+     
+     let secsPerMove: Float = 6.0
+     rotationY = sinf( Float(time) * 2.0 * .pi / secsPerMove)
+     rotationX = sinf( Float(time) * 2.0 * .pi / secsPerMove)
+     }*/
 }

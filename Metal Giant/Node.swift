@@ -2,6 +2,8 @@ import MetalKit
 import simd
 
 class Node {
+    static var modelLibrary: ModelLibrary!
+    
     var modelMesh: ModelMesh
     var modelTexture: ModelTexture
 
@@ -15,20 +17,18 @@ class Node {
     
     var scale:     Float = 1.0
     
-    var modelMatrix: float4x4
+    var modelMatrix: float4x4 = float4x4()
     
     // TODO: make modelLibrary a static member?
-    init(_ modelLibrary: ModelLibrary) {
-        modelMesh = modelLibrary.modelMeshes["cube"]!
-        modelTexture = modelLibrary.modelTextures["cube"]!
+    // TODO: remove metalDevice requirement
+    //init(_ modelLibrary: ModelLibrary) {
+    init(_ metalDevice: MTLDevice) {
+        Node.modelLibrary = ModelLibrary(metalDevice)
+        
+        modelMesh = Node.modelLibrary.modelMeshes["cube"]!
+        modelTexture = Node.modelLibrary.modelTextures["cube"]!
 
-        // TODO: replace with updateModelMatrix
-        modelMatrix = float4x4()
-        modelMatrix.translate(x: positionX, y: positionY, z: positionZ)
-        modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.rotateAroundY(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.rotateAroundZ(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.scale(x: scale, y: scale, z: scale)
+        self.updateModelMatrix()
     }
     
     func updateModelMatrix() {
@@ -39,24 +39,4 @@ class Node {
         modelMatrix.rotateAroundZ(x: rotationX, y: rotationY, z: rotationZ)
         modelMatrix.scale(x: scale, y: scale, z: scale)
     }
-    
-    /*func modelMatrix() -> float4x4 {
-        var matrix = float4x4()
-        matrix.translate(x: positionX, y: positionY, z: positionZ)
-        matrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
-        matrix.scale(x: scale, y: scale, z: scale)
-        return matrix
-    }*/
-    
-    /*func updateWithDelta(delta: CFTimeInterval) {
-        time += delta
-     }*/
-    
-    /*func updateWithDelta(delta: CFTimeInterval) {
-        super.updateWithDelta(delta: delta)
-     
-        let secsPerMove: Float = 6.0
-        rotationY = sinf(Float(time) * 2.0 * .pi / secsPerMove)
-        rotationX = sinf(Float(time) * 2.0 * .pi / secsPerMove)
-     }*/
 }

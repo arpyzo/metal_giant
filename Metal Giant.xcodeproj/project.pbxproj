@@ -12,7 +12,7 @@
 		D75A5270214D9FE000D0BD39 /* Light.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75A526F214D9FE000D0BD39 /* Light.swift */; };
 		D770F518229B529B00F06E66 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D770F517229B529B00F06E66 /* Renderer.swift */; };
 		D770F51A229B53A800F06E66 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D770F519229B53A800F06E66 /* Scene.swift */; };
-		D777B189215344500050D542 /* float4x4_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D777B188215344500050D542 /* float4x4_Extensions.swift */; };
+		D777B189215344500050D542 /* Float4x4Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D777B188215344500050D542 /* Float4x4Extensions.swift */; };
 		D78D87C6212A8AE4001EA8BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */; };
 		D78D87D0212A8AE5001EA8BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D78D87CE212A8AE5001EA8BD /* LaunchScreen.storyboard */; };
 		D7A3BC4722A2387400FA940F /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A3BC4622A2387400FA940F /* Node.swift */; };
@@ -20,6 +20,7 @@
 		D7EAC5F4213502AE00B9827C /* ModelLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EAC5F3213502AE00B9827C /* ModelLibrary.swift */; };
 		D7EDC34E2145E7F400DCC012 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EDC34D2145E7F400DCC012 /* ViewController.swift */; };
 		D7EDC3502145EE6100DCC012 /* BufferProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EDC34F2145EE6100DCC012 /* BufferProvider.swift */; };
+		D7F50D56230275380042AE6D /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F50D55230275380042AE6D /* Singleton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +29,7 @@
 		D75A526F214D9FE000D0BD39 /* Light.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Light.swift; sourceTree = "<group>"; };
 		D770F517229B529B00F06E66 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		D770F519229B53A800F06E66 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
-		D777B188215344500050D542 /* float4x4_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = float4x4_Extensions.swift; sourceTree = "<group>"; };
+		D777B188215344500050D542 /* Float4x4Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Float4x4Extensions.swift; sourceTree = "<group>"; };
 		D78D87C2212A8AE4001EA8BD /* Metal Giant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Metal Giant.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D78D87CF212A8AE5001EA8BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -38,6 +39,7 @@
 		D7EAC5F3213502AE00B9827C /* ModelLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelLibrary.swift; sourceTree = "<group>"; };
 		D7EDC34D2145E7F400DCC012 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D7EDC34F2145EE6100DCC012 /* BufferProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferProvider.swift; sourceTree = "<group>"; };
+		D7F50D55230275380042AE6D /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */,
-				D777B188215344500050D542 /* float4x4_Extensions.swift */,
+				D777B188215344500050D542 /* Float4x4Extensions.swift */,
 				D7EDC34D2145E7F400DCC012 /* ViewController.swift */,
 				D770F517229B529B00F06E66 /* Renderer.swift */,
 				D78D87CE212A8AE5001EA8BD /* LaunchScreen.storyboard */,
@@ -84,6 +86,7 @@
 				D75A526F214D9FE000D0BD39 /* Light.swift */,
 				D770F519229B53A800F06E66 /* Scene.swift */,
 				D7A3BC4622A2387400FA940F /* Node.swift */,
+				D7F50D55230275380042AE6D /* Singleton.swift */,
 			);
 			path = "Metal Giant";
 			sourceTree = "<group>";
@@ -159,7 +162,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D777B189215344500050D542 /* float4x4_Extensions.swift in Sources */,
+				D777B189215344500050D542 /* Float4x4Extensions.swift in Sources */,
+				D7F50D56230275380042AE6D /* Singleton.swift in Sources */,
 				D7EDC3502145EE6100DCC012 /* BufferProvider.swift in Sources */,
 				D7EDC34E2145E7F400DCC012 /* ViewController.swift in Sources */,
 				D7A3BC4722A2387400FA940F /* Node.swift in Sources */,

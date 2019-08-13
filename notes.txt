@@ -1,0 +1,50 @@
+AppDelegate
+ - create viewController
+ - create window
+ - set window.rootView to viewController
+ 
+ViewController
+ - set view to MTKView
+ 
+ - create metalDevice
+ 
+ - create renderer
+ - set renderer to be mtkView delegate
+ 
+ - create scene
+ - set renderer.scene to scene
+   ? create bufferProvider
+ 
+ ? set up gestures
+
+Renderer
+ - create metalLibrary
+ - create samplerState (using default sampleDescriptor)
+ - create pipelineState (using pipelineStateDescriptor with shaders & pixelFormat)
+ - create commandQueue
+
+Renderer MTKView delegate functions
+ - mtkView for size changes (calls scene.updateViewProjectionMatrix)
+ ? draw for performing repeated rendering
+
+Scene
+ - create clearColor
+ - create light
+
+ - create viewMatrix (camera position)
+ - create projectionMatrix (distance = smaller objects)
+ - create viewProjectionMatrix (how we look at the scene)
+
+ ? create modelLibrary
+ ? create node
+
+ModelLibrary
+ - "load" vertices
+ - create buffer from vertices
+ - load texture
+
+Node
+ - set position, rotation, scale
+ - fetch mesh from modelLibrary
+ - fetch texture from modelLibrary
+ - create modelMatrix
