@@ -38,12 +38,11 @@ class ViewController: UIViewController {
     }
     
     func setupGestures() {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(ViewController.pan))
-        self.view.addGestureRecognizer(pan)
+        let panHandler = UIPanGestureRecognizer(target: self, action: #selector(ViewController.panHandler))
+        self.view.addGestureRecognizer(panHandler)
     }
     
-    // TODO: Rotate camera (view matrix), not node
-    @objc func pan(panGesture: UIPanGestureRecognizer) {
+    @objc func panHandler(panGesture: UIPanGestureRecognizer) {
         if panGesture.state == UIGestureRecognizer.State.changed {
             let pointInView = panGesture.location(in: self.view)
             

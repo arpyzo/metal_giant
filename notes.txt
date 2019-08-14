@@ -16,7 +16,7 @@ ViewController
  - set renderer.scene to scene
    - create bufferProvider (from scene)
  
- ? set up gestures
+ - set up gestures
 
 Renderer
  - create metalLibrary
