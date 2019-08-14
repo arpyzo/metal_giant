@@ -28,7 +28,8 @@ extension float4x4 {
         self = self * float4x4.makeTranslationMatrix(x, y, z)
     }
 
-    static func makeXRotationMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+    // TODO: these are angles... not x, y, z
+    static func makeXRotationMatrix(_ x: Float) -> float4x4 {
         let rotationMatrix = float4x4([
             float4(1,       0,      0, 0),
             float4(0,  cos(x), sin(x), 0),
@@ -39,11 +40,11 @@ extension float4x4 {
         return rotationMatrix
     }
     
-    mutating func rotateAroundX(x: Float, y: Float, z: Float) {
-        self = self * float4x4.makeXRotationMatrix(x, y, z)
+    mutating func rotateAroundX(x: Float) {
+        self = self * float4x4.makeXRotationMatrix(x)
     }
 
-    static func makeYRotationMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+    static func makeYRotationMatrix(_ y: Float) -> float4x4 {
         let rotationMatrix = float4x4([
             float4(cos(y), 0, -sin(y), 0),
             float4(     0, 1,       0, 0),
@@ -54,11 +55,11 @@ extension float4x4 {
         return rotationMatrix
     }
 
-    mutating func rotateAroundY(x: Float, y: Float, z: Float) {
-        self = self * float4x4.makeYRotationMatrix(x, y, z)
+    mutating func rotateAroundY(y: Float) {
+        self = self * float4x4.makeYRotationMatrix(y)
     }
 
-    static func makeZRotationMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {
+    static func makeZRotationMatrix(_ z: Float) -> float4x4 {
         let rotationMatrix = float4x4([
             float4( cos(z), sin(z), 0, 0),
             float4(-sin(z), cos(z), 0, 0),
@@ -69,8 +70,8 @@ extension float4x4 {
         return rotationMatrix
     }
 
-    mutating func rotateAroundZ(x: Float, y: Float, z: Float) {
-        self = self * float4x4.makeZRotationMatrix(x, y, z)
+    mutating func rotateAroundZ(z: Float) {
+        self = self * float4x4.makeZRotationMatrix(z)
     }
 
     static func makeScalingMatrix(_ x: Float, _ y: Float, _ z: Float) -> float4x4 {

@@ -24,7 +24,7 @@ class Scene {
         
         viewMatrix = float4x4()
         viewMatrix.translate(x: 0.0, y: 0.0, z: -4)
-        viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
+        viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25))
         
         updateViewProjectionMatrix(aspectRatio: aspectRatio)
         

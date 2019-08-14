@@ -26,9 +26,9 @@ class Node {
     func updateModelMatrix() {
         modelMatrix = float4x4()
         modelMatrix.translate(x: positionX, y: positionY, z: positionZ)
-        modelMatrix.rotateAroundX(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.rotateAroundY(x: rotationX, y: rotationY, z: rotationZ)
-        modelMatrix.rotateAroundZ(x: rotationX, y: rotationY, z: rotationZ)
+        modelMatrix.rotateAroundX(x: rotationX)
+        modelMatrix.rotateAroundY(y: rotationY)
+        modelMatrix.rotateAroundZ(z: rotationZ)
         modelMatrix.scale(x: scale, y: scale, z: scale)
     }
 }
