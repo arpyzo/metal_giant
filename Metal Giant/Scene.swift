@@ -7,6 +7,7 @@ class Scene {
     
     var modelLibrary: ModelLibrary!
     var node: Node!
+    var node2: Node!
     
     var clearColor: MTLClearColor
     var light: Light
@@ -26,8 +27,12 @@ class Scene {
         viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25), y: 0.0, z: 0.0)
         
         updateViewProjectionMatrix(aspectRatio: aspectRatio)
-                
+        
+        // TODO: create node hierarchy
         node = modelLibrary.makeNode("cube")
+        node2 = modelLibrary.makeNode("cube")
+        node2.positionY = 1.0
+        node2.updateModelMatrix()
     }
     
     func updateViewProjectionMatrix(aspectRatio: Float) {

@@ -11,9 +11,10 @@ ViewController
  - create renderer
  - set renderer to be mtkView delegate
  
- - create scene
+ - create modelLibrary
+ - create scene (using modelLibrary)
  - set renderer.scene to scene
-   ? create bufferProvider
+   - create bufferProvider (from scene)
  
  ? set up gestures
 
@@ -25,7 +26,15 @@ Renderer
 
 Renderer MTKView delegate functions
  - mtkView for size changes (calls scene.updateViewProjectionMatrix)
- ? draw for performing repeated rendering
+ - draw
+   - set up renderPassDescriptor
+   - handle bufferProvider
+   - create renderEncoder with renderDesriptor
+     - add cullMode
+     - add pipelineState
+     - add vertex & fragment buffers (from scene.node)
+     - add uniform buffer (from scene)
+     - draw primitives (triangles)
 
 Scene
  - create clearColor
@@ -35,8 +44,7 @@ Scene
  - create projectionMatrix (distance = smaller objects)
  - create viewProjectionMatrix (how we look at the scene)
 
- ? create modelLibrary
- ? create node
+ - create node(s)
 
 ModelLibrary
  - "load" vertices

@@ -1,8 +1,8 @@
 import simd
 
 class Node {
-    var modelMesh: ModelMesh
-    var modelTexture: ModelTexture
+    var mesh: ModelMesh
+    var texture: ModelTexture
 
     var positionX: Float = 0.0
     var positionY: Float = 0.0
@@ -16,9 +16,9 @@ class Node {
     
     var modelMatrix: float4x4 = float4x4()
     
-    init(_ modelMesh: ModelMesh, _ modelTexture: ModelTexture) {
-        self.modelMesh = modelMesh
-        self.modelTexture = modelTexture
+    init(_ mesh: ModelMesh, _ texture: ModelTexture) {
+        self.mesh = mesh
+        self.texture = texture
 
         self.updateModelMatrix()
     }

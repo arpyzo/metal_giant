@@ -63,15 +63,31 @@ class Renderer: NSObject, MTKViewDelegate {
         renderEncoder?.setCullMode(MTLCullMode.front)
         renderEncoder?.setRenderPipelineState(pipelineState)
         
-        renderEncoder?.setVertexBuffer(scene.node.modelMesh.vertexBuffer, offset: 0, index: 0)
-        renderEncoder?.setFragmentTexture(scene.node.modelTexture.texture, index: 0)
+        // TODO: recursively traverse nodes here?
+        
+        // ONE
+        renderEncoder?.setVertexBuffer(scene.node.mesh.vertexBuffer, offset: 0, index: 0)
+        renderEncoder?.setFragmentTexture(scene.node.texture.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         
         let uniformBuffer = bufferProvider.nextUniformBuffer(scene.viewProjectionMatrix, scene.node.modelMatrix, scene.light)
         renderEncoder?.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
         renderEncoder?.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
         
-        renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.node.modelMesh.vertexCount, instanceCount: scene.node.modelMesh.vertexCount/3)
+        renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.node.mesh.vertexCount, instanceCount: scene.node.mesh.vertexCount/3)
+        
+        // TWO
+        renderEncoder?.setVertexBuffer(scene.node2.mesh.vertexBuffer, offset: 0, index: 0)
+        renderEncoder?.setFragmentTexture(scene.node2.texture.texture, index: 0)
+        renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
+        
+        let uniformBuffer2 = bufferProvider.nextUniformBuffer(scene.viewProjectionMatrix, scene.node2.modelMatrix, scene.light)
+        renderEncoder?.setVertexBuffer(uniformBuffer2, offset: 0, index: 1)
+        renderEncoder?.setFragmentBuffer(uniformBuffer2, offset: 0, index: 1)
+        
+        renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.node2.mesh.vertexCount, instanceCount: scene.node2.mesh.vertexCount/3)
+        
+        
         renderEncoder?.endEncoding()
         
         commandBuffer?.present(drawable)

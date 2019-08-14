@@ -11,13 +11,11 @@ class ModelTexture {
     var texture: MTLTexture!
 }
 
-// TODO: remove model from modelMeshes & modelTextures
-
 class ModelLibrary {
     var metalDevice: MTLDevice
     
-    var modelMeshes: [String: ModelMesh] = [:]
-    var modelTextures: [String: ModelTexture] = [:]
+    var meshes: [String: ModelMesh] = [:]
+    var textures: [String: ModelTexture] = [:]
     
     // TODO: preload models?
     // TODO: performance - minimize copying
@@ -96,8 +94,8 @@ class ModelLibrary {
         let W = Vertex(x: -1.0, y:  -1.0, z:  -1.0, r:  0.0, g:  0.0, b:  1.0, a:  1.0, tx: 1.00, ty: 0.50, nx: 0.0, ny: 0.0, nz: -1.0)
         let X = Vertex(x: -1.0, y:   1.0, z:  -1.0, r:  0.1, g:  0.6, b:  0.4, a:  1.0, tx: 1.00, ty: 0.25, nx: 0.0, ny: 0.0, nz: -1.0)
         
-        modelMeshes["cube"] = ModelMesh()
-        modelMeshes["cube"]!.vertices = [
+        meshes["cube"] = ModelMesh()
+        meshes["cube"]!.vertices = [
             A,B,C, A,C,D,   // Front
             E,F,G, E,G,H,   // Left
             I,J,K, I,K,L,   // Right
@@ -107,23 +105,25 @@ class ModelLibrary {
         ]
         
         // TODO: replace with model I/O
-        modelMeshes["cube"]!.vertexData = Array<Float>()
-        for vertex in modelMeshes["cube"]!.vertices {
-            modelMeshes["cube"]!.vertexData += vertex.floatBuffer()
+        // TODO: make some buffers on-demand?
+        meshes["cube"]!.vertexData = Array<Float>()
+        for vertex in meshes["cube"]!.vertices {
+            meshes["cube"]!.vertexData += vertex.floatBuffer()
         }
-        modelMeshes["cube"]!.vertexCount = modelMeshes["cube"]!.vertices.count
+        meshes["cube"]!.vertexCount = meshes["cube"]!.vertices.count
 
-        let dataSize = modelMeshes["cube"]!.vertexData.count * MemoryLayout.size(ofValue: modelMeshes["cube"]!.vertexData[0])
-        modelMeshes["cube"]!.vertexBuffer = metalDevice.makeBuffer(bytes: modelMeshes["cube"]!.vertexData, length: dataSize, options: [])!
+        let dataSize = meshes["cube"]!.vertexData.count * MemoryLayout.size(ofValue: meshes["cube"]!.vertexData[0])
+        meshes["cube"]!.vertexBuffer = metalDevice.makeBuffer(bytes: meshes["cube"]!.vertexData, length: dataSize, options: [])!
 
         let textureLoader = MTKTextureLoader(device: metalDevice)
         let path = Bundle.main.path(forResource: "cube", ofType: "png")!
         
-        modelTextures["cube"] = ModelTexture()
-        modelTextures["cube"]!.texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
+        // TODO: move texture loading into ModelTexture init
+        textures["cube"] = ModelTexture()
+        textures["cube"]!.texture = try! textureLoader.newTexture(URL: NSURL(fileURLWithPath: path) as URL, options: nil)
     }
     
     func makeNode(_ nameName: String) -> Node {
-        return Node(modelMeshes["cube"]!, modelTextures["cube"]!)
+        return Node(meshes["cube"]!, textures["cube"]!)
     }
 }
