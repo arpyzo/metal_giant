@@ -27,7 +27,8 @@ class ViewController: UIViewController {
         mtkView.delegate = renderer
         
         modelLibrary = ModelLibrary(metalDevice)
-        scene = Scene(metalDevice, modelLibrary, Float(self.view.bounds.size.width / self.view.bounds.size.height))
+        scene = Scene(metalDevice, modelLibrary)
+        scene.updateViewProjectionMatrix(aspectRatio: Float(self.view.bounds.size.width / self.view.bounds.size.height))
         renderer.scene = scene
         
         setupGestures()

@@ -14,7 +14,7 @@ class Scene {
     
     let uniformBufferSize = MemoryLayout<Float>.size * float4x4.numberOfElements() * 2 + Light.size()
 
-    init(_ metalDevice: MTLDevice, _ modelLibrary: ModelLibrary, _ aspectRatio: Float) {
+    init(_ metalDevice: MTLDevice, _ modelLibrary: ModelLibrary) {
         // TODO: get light from lightLibrary
         // TODO: get clearColor from elsewhere
         
@@ -25,14 +25,14 @@ class Scene {
         viewMatrix = float4x4()
         viewMatrix.translate(x: 0.0, y: 0.0, z: -4)
         viewMatrix.rotateAroundX(x: float4x4.degrees(toRad: 25))
-        
-        updateViewProjectionMatrix(aspectRatio: aspectRatio)
-        
+                
         // TODO: create node hierarchy
         node = modelLibrary.makeNode("cube")
         node2 = modelLibrary.makeNode("cube")
         node2.positionY = 1.0
         node2.updateModelMatrix()
+        
+        updateViewProjectionMatrix(aspectRatio: 1)
     }
     
     func updateViewProjectionMatrix(aspectRatio: Float) {
