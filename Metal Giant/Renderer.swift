@@ -66,7 +66,9 @@ class Renderer: NSObject, MTKViewDelegate {
         // TODO: recursively traverse nodes here?
         
         // ONE
-        renderEncoder?.setVertexBuffer(scene.node.mesh.vertexBuffer, offset: 0, index: 0)
+
+        let dataSize = scene.node.mesh.vertexData.count * MemoryLayout.size(ofValue: scene.node.mesh.vertexData[0])
+        renderEncoder?.setVertexBytes(scene.node.mesh.vertexData, length: dataSize, index: 0)
         renderEncoder?.setFragmentTexture(scene.node.texture.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         
@@ -77,7 +79,9 @@ class Renderer: NSObject, MTKViewDelegate {
         renderEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: scene.node.mesh.vertexCount, instanceCount: scene.node.mesh.vertexCount/3)
         
         // TWO
-        renderEncoder?.setVertexBuffer(scene.node2.mesh.vertexBuffer, offset: 0, index: 0)
+        let dataSize2 = scene.node2.mesh.vertexData.count * MemoryLayout.size(ofValue: scene.node2.mesh.vertexData[0])
+        //renderEncoder?.setVertexBuffer(scene.node2.mesh.vertexBuffer, offset: 0, index: 0)
+        renderEncoder?.setVertexBytes(scene.node2.mesh.vertexData, length: dataSize2, index: 0)
         renderEncoder?.setFragmentTexture(scene.node2.texture.texture, index: 0)
         renderEncoder?.setFragmentSamplerState(samplerState, index: 0)
         

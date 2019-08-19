@@ -1,13 +1,12 @@
 import MetalKit
 
-class ModelMesh {
+struct ModelMesh {
     var vertices: Array<Vertex>!
     var vertexData: Array<Float>!
     var vertexCount: Int!
-    var vertexBuffer: MTLBuffer!
 }
 
-class ModelTexture {
+struct ModelTexture {
     var texture: MTLTexture!
 }
 
@@ -105,15 +104,11 @@ class ModelLibrary {
         ]
         
         // TODO: replace with model I/O
-        // TODO: make some buffers on-demand?
         meshes["cube"]!.vertexData = Array<Float>()
         for vertex in meshes["cube"]!.vertices {
             meshes["cube"]!.vertexData += vertex.floatBuffer()
         }
         meshes["cube"]!.vertexCount = meshes["cube"]!.vertices.count
-
-        let dataSize = meshes["cube"]!.vertexData.count * MemoryLayout.size(ofValue: meshes["cube"]!.vertexData[0])
-        meshes["cube"]!.vertexBuffer = metalDevice.makeBuffer(bytes: meshes["cube"]!.vertexData, length: dataSize, options: [])!
 
         let textureLoader = MTKTextureLoader(device: metalDevice)
         let path = Bundle.main.path(forResource: "cube", ofType: "png")!

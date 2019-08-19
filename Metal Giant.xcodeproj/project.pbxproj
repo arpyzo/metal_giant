@@ -70,20 +70,20 @@
 		D78D87C4212A8AE4001EA8BD /* Metal Giant */ = {
 			isa = PBXGroup;
 			children = (
-				D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */,
+				D78D87D1212A8AE5001EA8BD /* Info.plist */,
+				D78D87CE212A8AE5001EA8BD /* LaunchScreen.storyboard */,
 				D777B188215344500050D542 /* Float4x4Extensions.swift */,
+				D78D87C5212A8AE4001EA8BD /* AppDelegate.swift */,
 				D7EDC34D2145E7F400DCC012 /* ViewController.swift */,
 				D770F517229B529B00F06E66 /* Renderer.swift */,
-				D78D87CE212A8AE5001EA8BD /* LaunchScreen.storyboard */,
-				D78D87D1212A8AE5001EA8BD /* Info.plist */,
-				D75456E5212E86CD00EFC86F /* Shaders.metal */,
-				D7EAC5F12135027700B9827C /* Vertex.swift */,
+				D770F519229B53A800F06E66 /* Scene.swift */,
 				D7EAC5F3213502AE00B9827C /* ModelLibrary.swift */,
-				D72CE921214793C200246A64 /* cube.png */,
+				D7A3BC4622A2387400FA940F /* Node.swift */,
+				D7EAC5F12135027700B9827C /* Vertex.swift */,
 				D7EDC34F2145EE6100DCC012 /* BufferProvider.swift */,
 				D75A526F214D9FE000D0BD39 /* Light.swift */,
-				D770F519229B53A800F06E66 /* Scene.swift */,
-				D7A3BC4622A2387400FA940F /* Node.swift */,
+				D75456E5212E86CD00EFC86F /* Shaders.metal */,
+				D72CE921214793C200246A64 /* cube.png */,
 			);
 			path = "Metal Giant";
 			sourceTree = "<group>";
